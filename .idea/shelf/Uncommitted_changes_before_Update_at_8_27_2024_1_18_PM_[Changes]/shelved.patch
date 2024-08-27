@@ -1,0 +1,126 @@
+Index: admobAds/rewadedAd/src/main/java/com/example/rewadedad/extensions/PreloadRewardedAdsManager.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rewadedad.extensions\r\n\r\nimport android.app.Activity\r\nimport com.example.rewadedad.AdmobRewardedAd\r\nimport com.example.rewadedad.AdmobRewardedAdsManager\r\nimport com.monetization.core.AdmobBasePreloadAdsManager\r\nimport com.monetization.core.FullScreenAdsShowListener\r\nimport com.monetization.core.ad_units.core.AdType\r\n\r\nobject PreloadRewardedAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED) {\r\n\r\n    fun tryShowingRewardedAd(\r\n        placementKey: String,\r\n        key: String,\r\n        activity: Activity,\r\n        requestNewIfNotAvailable: Boolean = true,\r\n        requestNewIfAdShown: Boolean = true,\r\n        handlerDelay: Long = 1000,\r\n        onLoadingDialogStatusChange: (Boolean) -> Unit,\r\n        onRewarded: (Boolean) -> Unit,\r\n        onAdDismiss: (Boolean) -> Unit,\r\n    ) {\r\n        val controller = AdmobRewardedAdsManager.getAdController(key)\r\n        canShowAd(\r\n            activity = activity,\r\n            requestNewIfNotAvailable = requestNewIfNotAvailable,\r\n            placementKey = placementKey,\r\n            normalLoadingTime = handlerDelay,\r\n            controller = controller,\r\n            onLoadingDialogStatusChange = onLoadingDialogStatusChange,\r\n            onAdDismiss = onAdDismiss,\r\n            showAd = {\r\n                (controller?.getAvailableAd() as? AdmobRewardedAd)?.showAd(\r\n                    activity, object : FullScreenAdsShowListener {\r\n                        override fun onAdDismiss(\r\n                            adKey: String,\r\n                            adShown: Boolean,\r\n                            rewardEarned: Boolean,\r\n                        ) {\r\n                            onRewarded.invoke(rewardEarned)\r\n                            onFreeAd(true)\r\n                            if (requestNewIfAdShown) {\r\n                                controller.loadAd(activity, \"\", null)\r\n                            }\r\n                        }\r\n                    }\r\n                )\r\n            }\r\n        )\r\n    }\r\n    /*\r\n\r\n        fun tryShowingRewardedAd(\r\n            enable: Boolean,\r\n            key: String,\r\n            context: Activity,\r\n            requestNewIfNotAvailable: Boolean = true,\r\n            requestNewIfAdShown: Boolean = true,\r\n            handlerDelay: Long = 1000,\r\n            onLoadingDialogStatusChange: (Boolean) -> Unit,\r\n            onRewarded: (Boolean) -> Unit,\r\n            onAdDismiss: (Boolean) -> Unit,\r\n        ) {\r\n            if (AdsCommons.isFullScreenAdShowing) {\r\n                return\r\n            }\r\n            if (enable.not()) {\r\n                onAdDismiss.invoke(false)\r\n                return\r\n            }\r\n            val controller = AdmobRewardedAdsManager.getAdController(key)\r\n            if (controller == null) {\r\n                onAdDismiss.invoke(false)\r\n                return\r\n            }\r\n            val adToShow = (controller.getAvailableAd() as? GeneralInterOrAppOpenAd)\r\n            if (adToShow != null) {\r\n                if (handlerDelay > 0) {\r\n                    onLoadingDialogStatusChange.invoke(true)\r\n                }\r\n                Handler(Looper.getMainLooper()).postDelayed({\r\n                    onLoadingDialogStatusChange.invoke(false)\r\n                    adToShow.showAd(context, object : FullScreenAdsShowListener {\r\n                        override fun onAdDismiss(adKey: String,adShown: Boolean, rewardEarned: Boolean) {\r\n                            AdsCommons.logAds(\"onAdDismiss called, adShown $adShown rewardEarned $rewardEarned\")\r\n                            onRewarded.invoke(rewardEarned)\r\n                            onAdDismiss.invoke(adShown)\r\n                            if (requestNewIfAdShown) {\r\n                                controller.loadAd(\r\n                                    context,\r\n                                    \"tryShowingInterstitialAd showAd  onAdDismiss requestNewIfAdShown\",\r\n                                    null\r\n                                )\r\n                            }\r\n                        }\r\n\r\n                        override fun onAdShownFailed() {\r\n                            super.onAdShownFailed()\r\n                            onAdDismiss.invoke(false)\r\n                        }\r\n                    })\r\n                }, handlerDelay)\r\n            } else {\r\n                if (requestNewIfNotAvailable) {\r\n                    controller.loadAd(\r\n                        context,\r\n                        \"tryShowingInterstitialAd showAd null else case requestNewIfNotAvailable\",\r\n                        null\r\n                    )\r\n                }\r\n                onAdDismiss.invoke(false)\r\n            }\r\n        }*/\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/admobAds/rewadedAd/src/main/java/com/example/rewadedad/extensions/PreloadRewardedAdsManager.kt b/admobAds/rewadedAd/src/main/java/com/example/rewadedad/extensions/PreloadRewardedAdsManager.kt
+--- a/admobAds/rewadedAd/src/main/java/com/example/rewadedad/extensions/PreloadRewardedAdsManager.kt	(revision fcd526af81ad4ac939cee5aff6c42ff4850882df)
++++ b/admobAds/rewadedAd/src/main/java/com/example/rewadedad/extensions/PreloadRewardedAdsManager.kt	(date 1724694567748)
+@@ -48,67 +48,4 @@
+             }
+         )
+     }
+-    /*
+-
+-        fun tryShowingRewardedAd(
+-            enable: Boolean,
+-            key: String,
+-            context: Activity,
+-            requestNewIfNotAvailable: Boolean = true,
+-            requestNewIfAdShown: Boolean = true,
+-            handlerDelay: Long = 1000,
+-            onLoadingDialogStatusChange: (Boolean) -> Unit,
+-            onRewarded: (Boolean) -> Unit,
+-            onAdDismiss: (Boolean) -> Unit,
+-        ) {
+-            if (AdsCommons.isFullScreenAdShowing) {
+-                return
+-            }
+-            if (enable.not()) {
+-                onAdDismiss.invoke(false)
+-                return
+-            }
+-            val controller = AdmobRewardedAdsManager.getAdController(key)
+-            if (controller == null) {
+-                onAdDismiss.invoke(false)
+-                return
+-            }
+-            val adToShow = (controller.getAvailableAd() as? GeneralInterOrAppOpenAd)
+-            if (adToShow != null) {
+-                if (handlerDelay > 0) {
+-                    onLoadingDialogStatusChange.invoke(true)
+-                }
+-                Handler(Looper.getMainLooper()).postDelayed({
+-                    onLoadingDialogStatusChange.invoke(false)
+-                    adToShow.showAd(context, object : FullScreenAdsShowListener {
+-                        override fun onAdDismiss(adKey: String,adShown: Boolean, rewardEarned: Boolean) {
+-                            AdsCommons.logAds("onAdDismiss called, adShown $adShown rewardEarned $rewardEarned")
+-                            onRewarded.invoke(rewardEarned)
+-                            onAdDismiss.invoke(adShown)
+-                            if (requestNewIfAdShown) {
+-                                controller.loadAd(
+-                                    context,
+-                                    "tryShowingInterstitialAd showAd  onAdDismiss requestNewIfAdShown",
+-                                    null
+-                                )
+-                            }
+-                        }
+-
+-                        override fun onAdShownFailed() {
+-                            super.onAdShownFailed()
+-                            onAdDismiss.invoke(false)
+-                        }
+-                    })
+-                }, handlerDelay)
+-            } else {
+-                if (requestNewIfNotAvailable) {
+-                    controller.loadAd(
+-                        context,
+-                        "tryShowingInterstitialAd showAd null else case requestNewIfNotAvailable",
+-                        null
+-                    )
+-                }
+-                onAdDismiss.invoke(false)
+-            }
+-        }*/
+ }
+\ No newline at end of file
+Index: admobAds/rewardedInterAds/src/main/java/com/example/rewardedinterads/extensions/PreloadRewardedInterAdsManager.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.rewardedinterads.extensions\r\n\r\nimport android.app.Activity\r\nimport com.example.rewardedinterads.AdmobRewardedInterAd\r\nimport com.example.rewardedinterads.AdmobRewardedInterAdsManager\r\nimport com.monetization.core.AdmobBasePreloadAdsManager\r\nimport com.monetization.core.FullScreenAdsShowListener\r\nimport com.monetization.core.ad_units.core.AdType\r\n\r\nobject PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED_INTERSTITIAL) {\r\n\r\n    fun tryShowingRewardedInterAd(\r\n        placementKey: String,\r\n        key: String,\r\n        activity: Activity,\r\n        requestNewIfNotAvailable: Boolean = true,\r\n        requestNewIfAdShown: Boolean = true,\r\n        handlerDelay: Long = 1000,\r\n        onLoadingDialogStatusChange: (Boolean) -> Unit,\r\n        onAdDismiss: (Boolean, Boolean) -> Unit,\r\n    ) {\r\n\r\n        val controller = AdmobRewardedInterAdsManager.getAdController(key)\r\n        canShowAd(\r\n            activity = activity,\r\n            requestNewIfNotAvailable = requestNewIfNotAvailable,\r\n            placementKey = placementKey,\r\n            normalLoadingTime = handlerDelay,\r\n            controller = controller,\r\n            onLoadingDialogStatusChange = onLoadingDialogStatusChange,\r\n            onAdDismiss = { shown ->\r\n                onAdDismiss.invoke(shown, false)\r\n            },\r\n            showAd = {\r\n                (controller?.getAvailableAd() as? AdmobRewardedInterAd)?.showAd(\r\n                    activity, object : FullScreenAdsShowListener {\r\n                        override fun onAdDismiss(\r\n                            adKey: String,\r\n                            adShown: Boolean,\r\n                            rewardEarned: Boolean,\r\n                        ) {\r\n                            onFreeAd(adShown, rewardEarned)\r\n                            if (requestNewIfAdShown) {\r\n                                controller.loadAd(activity, \"\", null)\r\n                            }\r\n                        }\r\n                    }\r\n                )\r\n            }\r\n        )\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/admobAds/rewardedInterAds/src/main/java/com/example/rewardedinterads/extensions/PreloadRewardedInterAdsManager.kt b/admobAds/rewardedInterAds/src/main/java/com/example/rewardedinterads/extensions/PreloadRewardedInterAdsManager.kt
+--- a/admobAds/rewardedInterAds/src/main/java/com/example/rewardedinterads/extensions/PreloadRewardedInterAdsManager.kt	(revision fcd526af81ad4ac939cee5aff6c42ff4850882df)
++++ b/admobAds/rewardedInterAds/src/main/java/com/example/rewardedinterads/extensions/PreloadRewardedInterAdsManager.kt	(date 1724746655286)
+@@ -17,6 +17,7 @@
+         requestNewIfAdShown: Boolean = true,
+         handlerDelay: Long = 1000,
+         onLoadingDialogStatusChange: (Boolean) -> Unit,
++        onRewarded: (Boolean) -> Unit,
+         onAdDismiss: (Boolean, Boolean) -> Unit,
+     ) {
+ 
+@@ -39,7 +40,8 @@
+                             adShown: Boolean,
+                             rewardEarned: Boolean,
+                         ) {
+-                            onFreeAd(adShown, rewardEarned)
++                            onRewarded.invoke(rewardEarned)
++                            onFreeAd(adShown)
+                             if (requestNewIfAdShown) {
+                                 controller.loadAd(activity, "", null)
+                             }
+Index: admobAds/core/src/main/java/com/monetization/core/AdmobBasePreloadAdsManager.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.monetization.core\r\n\r\nimport android.app.Activity\r\nimport android.os.Handler\r\nimport android.os.Looper\r\nimport com.monetization.core.ad_units.core.AdType\r\nimport com.monetization.core.commons.AdsCommons\r\nimport com.monetization.core.commons.AdsCommons.isAdEnabled\r\nimport com.monetization.core.commons.AdsCommons.isFullScreenAdShowing\r\nimport com.monetization.core.commons.AdsCommons.logAds\r\nimport com.monetization.core.commons.SdkConfigs\r\n\r\nabstract class AdmobBasePreloadAdsManager(\r\n    private val adType: AdType,\r\n) {\r\n    private var loadingDialogListener: ((Boolean) -> Unit)? = null\r\n\r\n    private var onDismissListener: ((Boolean) -> Unit)? = null\r\n    fun onFreeAd(check: Boolean = false, rewardEarned: Boolean = false) {\r\n        onDismissListener?.invoke(check)\r\n        onDismissListener = null\r\n        isFullScreenAdShowing = false\r\n    }\r\n\r\n    fun allowed(key: String): Boolean {\r\n        val allowed = SdkConfigs.canShowAd(key, adType)\r\n        if (allowed.not()) {\r\n            logAds(\"Ad is restricted by Sdk to show Key=$key,type=$adType\", true)\r\n        }\r\n        return allowed\r\n    }\r\n\r\n    fun canShowAd(\r\n        activity: Activity,\r\n        placementKey: String,\r\n        normalLoadingTime: Long = 1_000,\r\n        controller: AdsController?,\r\n        requestNewIfNotAvailable: Boolean,\r\n        onLoadingDialogStatusChange: (Boolean) -> Unit,\r\n        onAdDismiss: ((Boolean) -> Unit)? = null,\r\n        showAd: () -> Unit,\r\n    ) {\r\n        val enabled = placementKey.isAdEnabled()\r\n        if (AdsCommons.isFullScreenAdShowing) {\r\n            logAds(\"Full Screen Ad is already showing\")\r\n            return\r\n        }\r\n        loadingDialogListener = onLoadingDialogStatusChange\r\n        onDismissListener = onAdDismiss\r\n        val key = controller?.getAdKey() ?: \"\"\r\n        val availableAd = controller?.getAvailableAd()\r\n\r\n        if (allowed(key).not()) {\r\n            onFreeAd()\r\n            return\r\n        }\r\n        if (enabled.not()) {\r\n            onFreeAd()\r\n            return\r\n        }\r\n        if (requestNewIfNotAvailable && availableAd == null) {\r\n            controller?.loadAd(activity, \"\", null)\r\n            onFreeAd()\r\n            return\r\n        }\r\n        if (availableAd == null) {\r\n            onFreeAd()\r\n            return\r\n        }\r\n        if (controller?.getAvailableAd() == null) {\r\n            onFreeAd()\r\n            return\r\n        }\r\n        if (normalLoadingTime > 0) {\r\n            loadingDialogListener?.invoke(true)\r\n        }\r\n        nowShowAd(\r\n            normalLoadingTime = normalLoadingTime,\r\n            controller = controller,\r\n            showAd = showAd\r\n        )\r\n    }\r\n\r\n    private fun nowShowAd(\r\n        normalLoadingTime: Long,\r\n        controller: AdsController,\r\n        showAd: () -> Unit,\r\n    ) {\r\n        val adToShow = controller.getAvailableAd()\r\n        if (adToShow != null) {\r\n            Handler(Looper.getMainLooper()).postDelayed({\r\n                loadingDialogListener?.invoke(false)\r\n                showAd.invoke()\r\n            }, normalLoadingTime)\r\n        } else {\r\n            onFreeAd()\r\n        }\r\n    }\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/admobAds/core/src/main/java/com/monetization/core/AdmobBasePreloadAdsManager.kt b/admobAds/core/src/main/java/com/monetization/core/AdmobBasePreloadAdsManager.kt
+--- a/admobAds/core/src/main/java/com/monetization/core/AdmobBasePreloadAdsManager.kt	(revision fcd526af81ad4ac939cee5aff6c42ff4850882df)
++++ b/admobAds/core/src/main/java/com/monetization/core/AdmobBasePreloadAdsManager.kt	(date 1724614926585)
+@@ -16,7 +16,7 @@
+     private var loadingDialogListener: ((Boolean) -> Unit)? = null
+ 
+     private var onDismissListener: ((Boolean) -> Unit)? = null
+-    fun onFreeAd(check: Boolean = false, rewardEarned: Boolean = false) {
++    fun onFreeAd(check: Boolean = false) {
+         onDismissListener?.invoke(check)
+         onDismissListener = null
+         isFullScreenAdShowing = false
