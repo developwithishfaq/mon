@@ -13,7 +13,9 @@ import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
 import com.monetization.core.ad_units.GeneralNativeAd
 import com.monetization.core.ad_units.core.AdType
+import com.monetization.core.commons.AdsCommons
 import com.monetization.core.commons.AdsCommons.logAds
+import com.monetization.core.commons.NativeConstants.makeGone
 import com.monetization.core.commons.Utils
 import com.monetization.core.ui.AdsWidgetData
 import com.monetization.nativeads.ui.AdmobNativeMediaView
@@ -115,6 +117,7 @@ class AdmobNativeAd(
         adsWidgetData: AdsWidgetData?,
         onPopulated: () -> Unit,
     ) {
+
         val ad = this
         if (adViewLayout is AdmobNativeView) {
             logAds(
@@ -130,7 +133,7 @@ class AdmobNativeAd(
                         val adCtaBtn: TextView? = findViewById(R.id.ad_call_to_action)
                         val addAttrTextView: TextView? = findViewById(R.id.addAttr)
                         val mIconView = nativeAdView.findViewById<ImageView>(R.id.ad_app_icon)
-                        val mMedia: MediaView? = mediaView?.getMediaView()
+                        val mMedia = mediaView?.getMediaView()
 // Setting Up Ads Widget Data
                         setAdsWidgetData(
                             context = activity,
@@ -143,84 +146,61 @@ class AdmobNativeAd(
                             mediaView = mediaView
                         )
 //
-                        logAds(
-                            "populateAd($adKey) isMediaViewOk=${mMedia != null}",
+                        AdsCommons.logAds(
+                            "populateAd isMediaViewOk=${mMedia != null}",
                             isError = mMedia == null
                         )
-
-                        nativeAdView.mediaView = mMedia
-
+                        mediaView?.let {
+                            nativeAdView.mediaView = mMedia
+                            try {
+                                nativeAdView.mediaView?.let { adMedia ->
+                                    adMedia.makeGone(nativeAd.mediaContent == null)
+                                    mMedia.makeGone(nativeAd.mediaContent == null)
+                                    if (nativeAd.mediaContent != null) {
+                                        adMedia.mediaContent = nativeAd.mediaContent
+                                    }
+                                } ?: run {
+                                    nativeAdView.mediaView?.makeGone()
+                                    mMedia?.makeGone()
+                                }
+                            } catch (_: Exception) {
+                                nativeAdView.mediaView?.makeGone()
+                                mMedia?.makeGone()
+                            }
+                        }
                         nativeAdView.iconView = mIconView
+                        nativeAdView.iconView?.let {
+                            nativeAd.icon.let { icon ->
+                                nativeAdView.mediaView?.makeGone(icon == null)
+                                if (icon != null) {
+                                    (it as? ImageView)?.setImageDrawable(icon.drawable)
+                                }
+                            }
+                        } ?: run {
+                            mIconView.makeGone()
+                        }
+
                         nativeAdView.callToActionView = adCtaBtn
                         nativeAdView.bodyView = adBody
                         nativeAdView.headlineView = adHeadLine
 
-
-                        // Icon
-                        nativeAdView.iconView?.let {
-                            if (nativeAd.icon == null) {
-                                it.visibility = View.GONE
-                            } else {
-                                (it as ImageView).setImageDrawable(nativeAd.icon!!.drawable)
-                                it.visibility = View.VISIBLE
-                            }
-                        }
-
-                        //Headline
                         if (nativeAd.headline.isNullOrEmpty()) {
-                            nativeAdView.headlineView?.visibility = View.GONE
+                            adHeadLine?.visibility = View.GONE
                         } else {
-                            nativeAdView.headlineView?.visibility = View.VISIBLE
-                            nativeAdView.headlineView?.let {
-                                (it as? TextView)?.text = nativeAd.headline
-                            }
+                            adHeadLine?.visibility = View.VISIBLE
+                            adHeadLine?.text = nativeAd.headline
                         }
-                        //Body
+
                         if (nativeAd.body.isNullOrEmpty()) {
-                            nativeAdView.bodyView?.visibility = View.GONE
+                            adBody?.visibility = View.GONE
                         } else {
-                            nativeAdView.bodyView?.visibility = View.VISIBLE
-                            nativeAdView.bodyView?.let {
-                                (it as? TextView)?.text = nativeAd.body
-                            }
+                            adBody?.visibility = View.VISIBLE
+                            adBody?.text = nativeAd.body
                         }
-                        //Cta Button
-                        if (nativeAd.callToAction == null) {
-                            nativeAdView.callToActionView?.visibility = View.GONE
-                        } else {
-                            nativeAdView.callToActionView?.apply {
-                                this.visibility = View.VISIBLE
-                                (this as Button).text = nativeAd.callToAction
-                            }
+                        nativeAd.callToAction?.let { btn ->
+                            adCtaBtn?.text = btn
                         }
-
-
-                        nativeAdView.mediaView?.let { adMedia ->
-                            if (nativeAd.mediaContent == null) {
-                                adMedia.visibility = View.GONE
-                            } else {
-                                adMedia.visibility = View.VISIBLE
-                                adMedia.setOnHierarchyChangeListener(object :
-                                    ViewGroup.OnHierarchyChangeListener {
-                                    override fun onChildViewAdded(parent: View?, child: View?) {
-                                        try {
-                                            if (child !is ImageView) {
-                                                return
-                                            }
-                                            child.adjustViewBounds = true
-                                            child.scaleType = ImageView.ScaleType.CENTER_CROP
-                                        } catch (_: Exception) {
-                                        }
-                                    }
-
-                                    override fun onChildViewRemoved(parent: View?, child: View?) {
-                                    }
-                                })
-                            }
-                        }
-
                         nativeAdView.setNativeAd(nativeAd)
-                        logAds("Ad Populated: key=$adKey")
                         onPopulated.invoke()
                     }
                 }
