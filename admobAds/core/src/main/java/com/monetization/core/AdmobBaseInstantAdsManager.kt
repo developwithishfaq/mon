@@ -5,10 +5,10 @@ import android.os.Handler
 import android.os.Looper
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons
-import com.monetization.core.commons.AdsCommons.isAdEnabled
 import com.monetization.core.commons.AdsCommons.isFullScreenAdShowing
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.SdkConfigs
+import video.downloader.remoteconfig.SdkRemoteConfigConstants.isAdEnabled
 
 abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
 

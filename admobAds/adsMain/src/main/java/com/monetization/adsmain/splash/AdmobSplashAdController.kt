@@ -10,10 +10,10 @@ import com.monetization.appopen.AdmobAppOpenAd
 import com.monetization.appopen.AdmobAppOpenAdsManager
 import com.monetization.core.AdsLoadingStatusListener
 import com.monetization.core.FullScreenAdsShowListener
-import com.monetization.core.commons.AdsCommons.isAdEnabled
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.interstitials.AdmobInterstitialAd
 import com.monetization.interstitials.AdmobInterstitialAdsManager
+import video.downloader.remoteconfig.SdkRemoteConfigConstants.isAdEnabled
 
 class AdmobSplashAdController constructor(
 ) : DefaultLifecycleObserver {

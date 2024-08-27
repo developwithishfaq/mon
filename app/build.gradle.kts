@@ -54,13 +54,20 @@ dependencies {
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
-/*
+
     implementation(project(":admobAds:core"))
-    implementation(project(":admobAds:inter"))
-    implementation(project(":admobAds:banner_ads"))
-    implementation(project(":admobAds:native_ads"))
-    implementation(project(":admobAds:app_open"))
-    */
+    implementation(project(":admobAds:adsMain"))
+    implementation(project(":admobAds:appOpen"))
+    implementation(project(":admobAds:appUpdate"))
+    implementation(project(":admobAds:bannerAds"))
+    implementation(project(":admobAds:composeViews"))
+    implementation(project(":admobAds:consent"))
+    implementation(project(":admobAds:debug"))
+    implementation(project(":admobAds:firebaseConfig"))
+    implementation(project(":admobAds:interstitials"))
+    implementation(project(":admobAds:nativeAds"))
+    implementation(project(":admobAds:rewadedAd"))
+    implementation(project(":admobAds:rewardedInterAds"))
 //    implementation("com.ikame.android-sdk:ikm-android-sdk-release:3.0.140-beta")
 
 

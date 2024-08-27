@@ -10,6 +10,30 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 
+object SdkRemoteConfigConstants {
+
+    fun multipleChecks(vararg key: String): String {
+        var enabe = true
+        key.forEach {
+            if (it.isAdEnabled().not()) {
+                enabe = false
+            }
+        }
+        return enabe.toConfigString()
+    }
+
+
+    fun Boolean.toConfigString() = if (this) {
+        "SDK_TRUE"
+    } else {
+        "SDK_FALSE"
+    }
+
+    fun String.isAdEnabled(default: Boolean = true) =
+        SdkRemoteConfigController.getRemoteConfigBoolean(this, default)
+
+}
+
 object SdkRemoteConfigController {
 
     private var remoteConfig: FirebaseRemoteConfig? = null
@@ -49,9 +73,11 @@ object SdkRemoteConfigController {
             "SDK_FALSE" -> {
                 return false
             }
+
             "SDK_TRUE" -> {
                 return true
             }
+
             else -> {
                 val values = remoteConfig?.getBoolean(key) ?: def
                 logConfig(key, values.toString())

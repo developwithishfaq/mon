@@ -30,6 +30,7 @@ import com.example.debug.GenericViewModelFactory
 import com.example.debug.R
 import com.example.debug.presentation.DebugViewModel
 import com.example.debug.presentation.main_screen.pages.ControllersScreen
+import com.example.debug.presentation.main_screen.pages.EventsScreen
 import com.example.debug.presentation.main_screen.pages.RecentRequestsScreen
 import kotlinx.coroutines.launch
 
@@ -80,6 +81,9 @@ fun MainScreenDebug(
                     1 -> {
                         ControllersScreen(state)
                     }
+                    2 -> {
+                        EventsScreen(state)
+                    }
                 }
             }
 
@@ -98,6 +102,11 @@ fun MainScreenDebug(
             Item(text = "Controllers") {
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(1)
+                }
+            }
+            Item(text = "Events") {
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(2)
                 }
             }
         }

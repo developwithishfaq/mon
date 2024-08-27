@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import java.lang.Exception
 
 object SdkFirebase {
 
@@ -20,7 +19,8 @@ object SdkFirebase {
         if (::firebaseAnalytics.isInitialized.not()) {
             firebaseAnalytics = FirebaseAnalytics.getInstance(context)
         }
-        firebaseAnalytics.logEvent("" + message, bundle)
+        firebaseAnalytics.logEvent(message, bundle)
+//        AdsManagerHistoryHelper.addEvents(EventInfo(message, System.currentTimeMillis()))
     }
 
     fun sendException(exception: Exception) {

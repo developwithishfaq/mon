@@ -5,7 +5,7 @@ import android.util.Log
 import com.monetization.core.BuildConfig
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.SdkConfigs.isTestMode
-import video.downloader.remoteconfig.SdkRemoteConfigController
+import video.downloader.remoteconfig.SdkRemoteConfigConstants.isAdEnabled
 
 object AdsCommons {
 
@@ -19,24 +19,8 @@ object AdsCommons {
         }
     }
 
-    fun Boolean.toConfigString() = if (this) {
-        "SDK_TRUE"
-    } else {
-        "SDK_FALSE"
-    }
-
-    fun multipleChecks(vararg key: String): String {
-        var enabe = true
-        key.forEach {
-            if (it.isAdEnabled().not()) {
-                enabe = false
-            }
-        }
-        return enabe.toConfigString()
-    }
-
-    fun String.isAdEnabled(default: Boolean = true) =
-        SdkRemoteConfigController.getRemoteConfigBoolean(this, default)
+//    fun String.isAdEnabled(default: Boolean = true) =
+//        SdkRemoteConfigController.getRemoteConfigBoolean(this, default)
 
     fun Activity.getGoodName(): String {
         return localClassName.substringAfterLast(".")

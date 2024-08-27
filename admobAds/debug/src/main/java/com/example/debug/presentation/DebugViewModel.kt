@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.monetization.core.AdsController
 import com.monetization.core.history.AdsManagerHistoryHelper
 import com.monetization.core.models.AdmobAdInfo
+import com.monetization.core.models.EventInfo
 import com.monetization.core.models.Failed
 import com.monetization.core.models.Loaded
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 
 data class DebugState(
     val items: List<AdmobAdInfo> = emptyList(),
+    val events: List<EventInfo> = emptyList(),
     val controllers: List<ControllersInfo> = emptyList(),
 )
 
@@ -102,6 +104,15 @@ class DebugViewModel : ViewModel() {
                         )
                     }
                     getControllers()
+                }
+            }
+            launch {
+                AdsManagerHistoryHelper.getEvents().collectLatest { events ->
+                    _state.update {
+                        it.copy(
+                            events = events
+                        )
+                    }
                 }
             }
         }
