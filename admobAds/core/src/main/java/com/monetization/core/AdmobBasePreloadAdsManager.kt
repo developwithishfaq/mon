@@ -67,7 +67,7 @@ abstract class AdmobBasePreloadAdsManager(
             onFreeAd()
             return
         }
-        if (controller?.getAvailableAd() == null) {
+        if (controller.getAvailableAd() == null) {
             onFreeAd()
             return
         }

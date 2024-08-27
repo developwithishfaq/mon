@@ -149,10 +149,6 @@ abstract class AdsControllerBaseHelper(
     fun commonLoadAdChecks(
         callback: AdsLoadingStatusListener?,
     ): Boolean {
-        if (canLoadAd().not()) {
-            callback?.onAdFailedToLoad(adKey, "Ad Is Restricted To Load, key=$adKey,type=$adType")
-            return false
-        }
         logAds("$adType loadAd function called,enabled=$isAdEnabled,requesting=${isAdRequesting()},isAdAvailable=${isAdAvailable()}")
         this.loadingStateListener = callback
         if (isAdEnabled.not()) {
@@ -164,6 +160,10 @@ abstract class AdsControllerBaseHelper(
         }
         if (isAdAvailable()) {
             loadingStateListener?.onAdLoaded(adKey)
+            return false
+        }
+        if (canLoadAd().not()) {
+            callback?.onAdFailedToLoad(adKey, "Ad Is Restricted To Load, key=$adKey,type=$adType")
             return false
         }
         return true
