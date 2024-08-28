@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,6 +32,7 @@ import com.example.debug.R
 import com.example.debug.presentation.DebugViewModel
 import com.example.debug.presentation.main_screen.pages.ControllersScreen
 import com.example.debug.presentation.main_screen.pages.EventsScreen
+import com.example.debug.presentation.main_screen.pages.LogsScreen
 import com.example.debug.presentation.main_screen.pages.RecentRequestsScreen
 import kotlinx.coroutines.launch
 
@@ -47,7 +49,7 @@ fun MainScreenDebug(
     val coroutineScope = rememberCoroutineScope()
 
     val pagerState = rememberPagerState {
-        2
+        4
     }
     Column(
         modifier = Modifier
@@ -81,7 +83,12 @@ fun MainScreenDebug(
                     1 -> {
                         ControllersScreen(state)
                     }
+
                     2 -> {
+                        LogsScreen(state)
+                    }
+
+                    3 -> {
                         EventsScreen(state)
                     }
                 }
@@ -92,21 +99,27 @@ fun MainScreenDebug(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = colorResource(id = R.color.white))
-                .padding(vertical = 10.dp, horizontal = 10.dp)
+                .padding(vertical = 10.dp, horizontal = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Item(text = "Requests") {
+            Item(text = "History", pagerState.currentPage == 0) {
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(0)
                 }
             }
-            Item(text = "Controllers") {
+            Item(text = "Units", pagerState.currentPage == 1) {
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(1)
                 }
             }
-            Item(text = "Events") {
+            Item(text = "Logs", pagerState.currentPage == 2) {
                 coroutineScope.launch {
                     pagerState.animateScrollToPage(2)
+                }
+            }
+            Item(text = "Events", pagerState.currentPage == 3) {
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(3)
                 }
             }
         }
@@ -114,7 +127,7 @@ fun MainScreenDebug(
 }
 
 @Composable
-fun RowScope.Item(text: String, onClick: () -> Unit) {
+fun RowScope.Item(text: String, selected: Boolean, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .weight(1f),
@@ -122,12 +135,21 @@ fun RowScope.Item(text: String, onClick: () -> Unit) {
     ) {
         Text(
             text = text,
-            fontSize = 16.sp,
+            fontSize = if (selected) {
+                19.sp
+            } else {
+                16.sp
+            },
             modifier = Modifier
                 .padding(horizontal = 10.dp, vertical = 10.dp)
                 .clickable {
                     onClick.invoke()
-                }
+                },
+            color = if (selected) {
+                Color.Black
+            } else {
+                Color.Gray
+            }
         )
     }
 }

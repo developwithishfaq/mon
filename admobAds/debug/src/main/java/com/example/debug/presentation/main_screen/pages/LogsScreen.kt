@@ -2,8 +2,10 @@ package com.example.debug.presentation.main_screen.pages
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,12 +34,11 @@ import com.example.debug.formatMillisToTime
 import com.example.debug.presentation.DebugState
 
 @Composable
-fun EventsScreen(state: DebugState) {
+fun LogsScreen(state: DebugState) {
 
     var searchText by rememberSaveable {
         mutableStateOf("")
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,8 +55,6 @@ fun EventsScreen(state: DebugState) {
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp, vertical = 10.dp)
         )
-
-
         val color = if (sorted) {
             Color.Green
         } else {
@@ -80,10 +79,9 @@ fun EventsScreen(state: DebugState) {
             )
         }
 
-        val list = state.events.filter {
-            it.event.contains(searchText, true) || it.event.contains(searchText, true)
+        val list = state.logs.filter {
+            it.log.contains(searchText, true) || it.tag.contains(searchText, true)
         }
-
 
         LazyColumn {
             items(
@@ -111,16 +109,34 @@ fun EventsScreen(state: DebugState) {
                             .padding(vertical = 12.dp, horizontal = 10.dp)
                     ) {
                         Text(
-                            text = event.event,
-                            color = Color.Black,
+                            text = event.log,
+                            color = if (event.isError) {
+                                Color.Red
+                            } else {
+                                Color.Black
+                            },
                             fontSize = 16.sp
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = event.recordedAt.formatMillisToTime(),
-                            color = Color.Black,
-                            fontSize = 11.sp
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = event.recordedAt.formatMillisToTime(),
+                                color = Color.Black,
+                                fontSize = 11.sp
+                            )
+                            Text(
+                                text = event.tag,
+                                color = Color.Black,
+                                fontSize = 11.sp,
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp)
+                            )
+                        }
                     }
                 }
             }

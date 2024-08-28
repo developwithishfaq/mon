@@ -8,6 +8,7 @@ import com.monetization.core.models.AdmobAdInfo
 import com.monetization.core.models.EventInfo
 import com.monetization.core.models.Failed
 import com.monetization.core.models.Loaded
+import com.monetization.core.models.LogInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -17,6 +18,7 @@ import kotlinx.coroutines.launch
 data class DebugState(
     val items: List<AdmobAdInfo> = emptyList(),
     val events: List<EventInfo> = emptyList(),
+    val logs: List<LogInfo> = emptyList(),
     val controllers: List<ControllersInfo> = emptyList(),
 )
 
@@ -115,10 +117,19 @@ class DebugViewModel : ViewModel() {
                     }
                 }
             }
+            launch {
+                AdsManagerHistoryHelper.getLogs().collectLatest { events ->
+                    _state.update {
+                        it.copy(
+                            logs = events
+                        )
+                    }
+                }
+            }
         }
     }
 
-    fun getControllers() {
+    private fun getControllers() {
         viewModelScope.launch {
             val adsHistory = AdsManagerHistoryHelper.getHistory().value
             val controllers = AdsManagerHistoryHelper.getControllers().value
