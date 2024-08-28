@@ -59,7 +59,9 @@ class AdmobSplashAdController constructor(
                 onAdDismissed("Not Enabled $adType")
             }, 2000)
         } else {
-            lifecycle.addObserver(this)
+            if (lifecycle.currentState != Lifecycle.State.DESTROYED) {
+                lifecycle.addObserver(this)
+            }
             startLoadingAds(activity)
         }
     }
