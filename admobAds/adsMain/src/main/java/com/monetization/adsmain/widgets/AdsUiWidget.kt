@@ -3,6 +3,7 @@ package com.monetization.adsmain.widgets
 import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
@@ -111,8 +112,7 @@ class AdsUiWidget @JvmOverloads constructor(
         oneTimeUse: Boolean = true,
         requestNewOnShow: Boolean = true,
     ) {
-
-        addView(nativeWidget)
+        removeAndAdNativeWidget()
         nativeWidget.showNativeAdmob(
             activity = activity,
             adKey = adKey,
@@ -124,6 +124,7 @@ class AdsUiWidget @JvmOverloads constructor(
         )
     }
 
+
     fun showBannerAdmob(
         activity: Activity,
         adKey: String,
@@ -132,7 +133,7 @@ class AdsUiWidget @JvmOverloads constructor(
         oneTimeUse: Boolean = true,
         requestNewOnShow: Boolean = true,
     ) {
-        addView(bannerWidget)
+        removeAndAdBannerWidget()
         bannerWidget.showBannerAdmob(
             activity = activity,
             adKey = adKey,
@@ -142,6 +143,28 @@ class AdsUiWidget @JvmOverloads constructor(
             oneTimeUse = oneTimeUse,
             requestNewOnShow = requestNewOnShow
         )
+    }
+
+    private fun removeAndAdNativeWidget() {
+        try {
+            (nativeWidget.parent as? ViewGroup)?.removeView(nativeWidget)
+        } catch (_: Exception) {
+        }
+        try {
+            addView(nativeWidget)
+        } catch (_: Exception) {
+        }
+    }
+
+    private fun removeAndAdBannerWidget() {
+        try {
+            (bannerWidget.parent as? ViewGroup)?.removeView(bannerWidget)
+        } catch (_: Exception) {
+        }
+        try {
+            addView(bannerWidget)
+        } catch (_: Exception) {
+        }
     }
 
     fun setInPause(check: Boolean, forBanner: Boolean) {
