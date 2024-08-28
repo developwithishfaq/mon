@@ -5,7 +5,7 @@ import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import video.downloader.remoteconfig.SdkFirebase
+import video.downloader.remoteconfig.SdkFirebaseInternal
 
 
 class AdsSdk(
@@ -46,7 +46,7 @@ class AdsSdk(
             return
         }
         isFirebaseInitialized = true
-        SdkFirebase.initialize(context)
+        SdkFirebaseInternal.initialize(context)
         onInitialized.invoke()
     }
 }
