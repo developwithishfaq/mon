@@ -2,6 +2,7 @@ package com.monetization.adsmain.sdk
 
 import android.content.Context
 import com.google.android.gms.ads.MobileAds
+import com.monetization.core.firebase.Sdk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class AdsSdk(
             return
         }
         isFirebaseInitialized = true
-        SdkFirebaseInternal.initialize(context)
+        Sdk.initFirebase(context)
         onInitialized.invoke()
     }
 }

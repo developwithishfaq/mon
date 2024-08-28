@@ -47,7 +47,7 @@ fun EventsScreen(state: DebugState) {
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
-                            text = event.recorderAt.formatMillisToTime(),
+                            text = event.recordedAt.formatMillisToTime(),
                             color = Color.Black,
                             fontSize = 11.sp
                         )
