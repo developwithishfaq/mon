@@ -10,10 +10,4 @@
 
     </application>
 
-    <application>
-        <activity
-            android:name="video.downloader.adsmain.debugs.DebugAdsHistoryActivity"
-            android:exported="false" />
-    </application>
-
 </manifest>
