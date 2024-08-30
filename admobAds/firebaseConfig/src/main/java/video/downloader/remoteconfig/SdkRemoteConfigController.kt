@@ -45,7 +45,7 @@ object SdkRemoteConfigController {
 
     private var runnable = {
         if (isHandlerRunning) {
-            logAds("")
+            logAdsConfig("")
             responseCallBack()
         }
     }
@@ -99,7 +99,7 @@ object SdkRemoteConfigController {
             }
             this.listener = callback
             remoteConfig = FirebaseRemoteConfig.getInstance()
-            logAds("Remote Config Is Ok ${remoteConfig != null}", isError = remoteConfig == null)
+            logAdsConfig("Remote Config Is Ok ${remoteConfig != null}", isError = remoteConfig == null)
             val remoteConfigBuilder = FirebaseRemoteConfigSettings.Builder()
             remoteConfigBuilder.fetchTimeoutInSeconds = fetchOutTimeInSeconds
             if (com.google.firebase.remoteconfig.BuildConfig.DEBUG) {
@@ -127,7 +127,7 @@ object SdkRemoteConfigController {
                 }
             })
         } catch (_: Exception) {
-            logAds("Firebase is not initialized", true)
+            logAdsConfig("Firebase is not initialized", true)
             responseCallBack()
         }
     }
@@ -136,7 +136,7 @@ object SdkRemoteConfigController {
         if (isHandlerRunning.not()) {
             isHandlerRunning = true
             val actualTime = time * 1000
-            logAds("Remote Config Time Started Of Millies=$actualTime")
+            logAdsConfig("Remote Config Time Started Of Millies=$actualTime")
             handler.postDelayed(runnable, actualTime)
         }
     }
@@ -155,7 +155,7 @@ object SdkRemoteConfigController {
     }
 }
 
-fun logAds(message: String, isError: Boolean = false) {
+fun logAdsConfig(message: String, isError: Boolean = false) {
     if (isError) {
         Log.e("adsPlugin", "Ads: $message")
     } else {

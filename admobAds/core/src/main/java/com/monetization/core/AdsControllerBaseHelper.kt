@@ -61,7 +61,7 @@ abstract class AdsControllerBaseHelper(
 
 
     private fun canLoadAd(): Boolean {
-        val canLoadAd = SdkConfigs.getListener()?.canLoadAd(adType, adKey) ?: false
+        val canLoadAd = SdkConfigs.canLoadAds(adKey, adType) ?: false
         if (canLoadAd.not()) {
             logAds(
                 "You Blocked Request Of $adType Ads,Key=$adKey",

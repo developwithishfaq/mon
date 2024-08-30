@@ -1,26 +1,20 @@
 package com.monetization.core.commons
 
 import android.app.Activity
-import android.util.Log
 import com.monetization.core.BuildConfig
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.SdkConfigs.isTestMode
-import video.downloader.remoteconfig.SdkRemoteConfigConstants.isAdEnabled
+import com.monetization.core.firebase.Sdk
 
 object AdsCommons {
 
     var isDebugMode = BuildConfig.DEBUG
     var isFullScreenAdShowing = false
     fun logAds(message: String, isError: Boolean = false) {
-        if (isError) {
-            Log.e("adsPlugin", "Ads: $message")
-        } else {
-            Log.d("adsPlugin", "Ads: $message")
-        }
+        Sdk.log(
+            "adsPlugin", message, isError
+        )
     }
-
-//    fun String.isAdEnabled(default: Boolean = true) =
-//        SdkRemoteConfigController.getRemoteConfigBoolean(this, default)
 
     fun Activity.getGoodName(): String {
         return localClassName.substringAfterLast(".")

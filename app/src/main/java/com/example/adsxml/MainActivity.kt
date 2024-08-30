@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
                 count += 1
                 delay(1000)
                 Sdk.sendEvent(this@MainActivity, "Hi Hello $count")
-                Sdk.log("cvv", "Hi Log $count")
+                Sdk.log("cvv", "Hi Log $count", isError = count % 2 == 0)
             }
         }
 
