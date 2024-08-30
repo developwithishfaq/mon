@@ -30,7 +30,7 @@ fun SdkBannerAd(
     placementKey: String,
     bannerAdType: BannerAdType,
     showShimmerLayout: ShimmerInfo = ShimmerInfo.GivenLayout(),
-    onTimeUse: Boolean = true,
+    showNewAdEveryTime: Boolean = true,
     requestNewOnShow: Boolean = false,
     defaultEnable: Boolean = true,
     sdkBannerViewModel: SdkBannerViewModel = viewModel(
@@ -66,7 +66,7 @@ fun SdkBannerAd(
                         bannerAdType = bannerAdType,
                         adKey = adKey,
                         shimmerInfo = showShimmerLayout,
-                        oneTimeUse = onTimeUse,
+                        oneTimeUse = showNewAdEveryTime,
                         requestNewOnShow = requestNewOnShow
                     )
                 }

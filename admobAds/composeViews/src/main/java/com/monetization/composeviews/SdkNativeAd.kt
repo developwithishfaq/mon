@@ -34,7 +34,7 @@ fun SdkNativeAd(
     showShimmerLayout: ShimmerInfo = ShimmerInfo.GivenLayout(),
     adsWidgetData: AdsWidgetData? = null,
     requestNewOnShow: Boolean = false,
-    oneTimeUse: Boolean = true,
+    showNewAdEveryTime: Boolean = true,
     defaultEnable: Boolean = true,
     sdkNativeViewModel: SdkNativeViewModel = viewModel(
         factory = GenericViewModelFactory(SdkNativeViewModel::class.java) {
@@ -67,7 +67,7 @@ fun SdkNativeAd(
                         adLayout = LayoutInfo.LayoutByName(adLayout),
                         adKey = adKey,
                         shimmerInfo = showShimmerLayout,
-                        oneTimeUse = oneTimeUse,
+                        oneTimeUse = showNewAdEveryTime,
                         requestNewOnShow = requestNewOnShow
                     )
                 }
