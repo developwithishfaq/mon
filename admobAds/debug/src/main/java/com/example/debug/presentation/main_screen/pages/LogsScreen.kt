@@ -62,7 +62,7 @@ fun LogsScreen(state: DebugState) {
             Color.Gray
         }
 
-        BoxButton(color = color) {
+        BoxButton("Sorted", color = color) {
             sorted = sorted.not()
         }
 
@@ -73,16 +73,24 @@ fun LogsScreen(state: DebugState) {
         var selectedTag by remember {
             mutableStateOf<String?>(null)
         }
+        Text(text = "Tags")
+        Spacer(modifier = Modifier.height(12.dp))
         LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
             items(list.map { it.tag }.distinct()) { tag ->
-                BoxButton(color = color) {
-                    if (tag == selectedTag) {
-                        selectedTag = null
+                BoxButton(
+                    tag, color = if (tag == selectedTag) {
+                        Color.Green
                     } else {
-                        selectedTag = tag
+                        Color.Gray
+                    }
+                ) {
+                    selectedTag = if (tag == selectedTag) {
+                        null
+                    } else {
+                        tag
                     }
                 }
             }
@@ -97,6 +105,12 @@ fun LogsScreen(state: DebugState) {
                 } else {
                     list.sortedByDescending {
                         it.recordedAt
+                    }
+                }.filter {
+                    if (selectedTag == null) {
+                        true
+                    } else {
+                        it.tag == selectedTag
                     }
                 }
             ) { event ->
@@ -151,7 +165,7 @@ fun LogsScreen(state: DebugState) {
 }
 
 @Composable
-fun BoxButton(color: Color, onClick: () -> Unit) {
+fun BoxButton(text: String, color: Color, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .padding(horizontal = 10.dp, vertical = 8.dp)
@@ -165,7 +179,7 @@ fun BoxButton(color: Color, onClick: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Sorted",
+            text = text,
             fontSize = 12.sp,
             color = color
         )
