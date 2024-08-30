@@ -67,7 +67,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.developwithishfaq"
                 artifactId = "adsMain"
-                version = "1.0"
+                version = "2.0"
             }
         }
     }
