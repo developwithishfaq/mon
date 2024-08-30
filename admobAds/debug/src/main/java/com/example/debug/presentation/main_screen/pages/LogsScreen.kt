@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -60,29 +61,33 @@ fun LogsScreen(state: DebugState) {
         } else {
             Color.Gray
         }
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 10.dp, vertical = 8.dp)
-                .border(
-                    1.dp, color, RoundedCornerShape(10)
-                )
-                .padding(horizontal = 18.dp, vertical = 8.dp)
-                .clickable {
-                    sorted = sorted.not()
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Sorted",
-                fontSize = 12.sp,
-                color = color
-            )
+
+        BoxButton(color = color) {
+            sorted = sorted.not()
         }
 
         val list = state.logs.filter {
             it.log.contains(searchText, true) || it.tag.contains(searchText, true)
         }
-
+        Spacer(modifier = Modifier.height(12.dp))
+        var selectedTag by remember {
+            mutableStateOf<String?>(null)
+        }
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            items(list.map { it.tag }.distinct()) { tag ->
+                BoxButton(color = color) {
+                    if (tag == selectedTag) {
+                        selectedTag = null
+                    } else {
+                        selectedTag = tag
+                    }
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(12.dp))
         LazyColumn {
             items(
                 if (sorted) {
@@ -142,5 +147,27 @@ fun LogsScreen(state: DebugState) {
             }
         }
 
+    }
+}
+
+@Composable
+fun BoxButton(color: Color, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 10.dp, vertical = 8.dp)
+            .border(
+                1.dp, color, RoundedCornerShape(10)
+            )
+            .padding(horizontal = 18.dp, vertical = 8.dp)
+            .clickable {
+                onClick.invoke()
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Sorted",
+            fontSize = 12.sp,
+            color = color
+        )
     }
 }

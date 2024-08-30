@@ -23,7 +23,7 @@ abstract class AdmobBasePreloadAdsManager(
     }
 
     fun allowed(key: String): Boolean {
-        val allowed = SdkConfigs.canShowAd(key, adType)
+        val allowed = SdkConfigs.canShowAds(key, adType)
         if (allowed.not()) {
             logAds("Ad is restricted by Sdk to show Key=$key,type=$adType", true)
         }

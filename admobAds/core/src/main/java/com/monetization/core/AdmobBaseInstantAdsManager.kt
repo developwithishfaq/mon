@@ -92,7 +92,7 @@ abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
         onDismissListener = onAdDismiss
 
         val key = controller?.getAdKey() ?: ""
-        if (SdkConfigs.canShowAd(key, adType).not()) {
+        if (SdkConfigs.canShowAds(key, adType).not()) {
             logAds("Ad is restricted by Sdk to show Key=$key,type=$adType", true)
             onFreeAd()
             return

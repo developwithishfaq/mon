@@ -67,7 +67,7 @@ abstract class BaseAdsWidget<T : AdsControllerBaseHelper> @JvmOverloads construc
         adsManager: AdsManager<T>,
         adType: AdType
     ) {
-        if (SdkConfigs.canShowAd(adKey, adType).not()) {
+        if (SdkConfigs.canShowAds(adKey, adType).not()) {
             logAds("Ad Showing is restricted against key=$adKey for $adType", true)
             makeGone()
             return
