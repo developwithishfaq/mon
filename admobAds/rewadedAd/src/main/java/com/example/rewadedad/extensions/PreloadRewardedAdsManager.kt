@@ -15,7 +15,7 @@ object PreloadRewardedAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED) {
         activity: Activity,
         requestNewIfNotAvailable: Boolean = true,
         requestNewIfAdShown: Boolean = true,
-        handlerDelay: Long = 1000,
+        normalLoadingTime: Long = 1000,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
         onRewarded: (Boolean) -> Unit,
         onAdDismiss: (Boolean) -> Unit,
@@ -25,7 +25,7 @@ object PreloadRewardedAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED) {
             activity = activity,
             requestNewIfNotAvailable = requestNewIfNotAvailable,
             placementKey = placementKey,
-            normalLoadingTime = handlerDelay,
+            normalLoadingTime = normalLoadingTime,
             controller = controller,
             onLoadingDialogStatusChange = onLoadingDialogStatusChange,
             onAdDismiss = onAdDismiss,
@@ -39,7 +39,7 @@ object PreloadRewardedAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED) {
                         ) {
                             onRewarded.invoke(rewardEarned)
                             onFreeAd(true)
-                            if (requestNewIfAdShown) {
+                            if (requestNewIfAdShown && adShown) {
                                 controller.loadAd(activity, "", null)
                             }
                         }

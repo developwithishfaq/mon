@@ -15,7 +15,7 @@ object PreloadInterstitialAdsManager : AdmobBasePreloadAdsManager(AdType.INTERST
         activity: Activity,
         requestNewIfNotAvailable: Boolean = true,
         requestNewIfAdShown: Boolean = true,
-        handlerDelay: Long = 1000,
+        normalLoadingTime: Long = 1000,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
         onAdDismiss: (Boolean) -> Unit,
     ) {
@@ -25,7 +25,7 @@ object PreloadInterstitialAdsManager : AdmobBasePreloadAdsManager(AdType.INTERST
             activity = activity,
             requestNewIfNotAvailable = requestNewIfNotAvailable,
             placementKey = placementKey,
-            normalLoadingTime = handlerDelay,
+            normalLoadingTime = normalLoadingTime,
             controller = controller,
             onLoadingDialogStatusChange = onLoadingDialogStatusChange,
             onAdDismiss = onAdDismiss,
@@ -38,7 +38,7 @@ object PreloadInterstitialAdsManager : AdmobBasePreloadAdsManager(AdType.INTERST
                             rewardEarned: Boolean,
                         ) {
                             onFreeAd(true)
-                            if (requestNewIfAdShown) {
+                            if (requestNewIfAdShown && adShown) {
                                 controller.loadAd(activity, "", null)
                             }
                         }

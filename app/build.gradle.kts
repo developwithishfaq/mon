@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -19,6 +20,7 @@ android {
     }
 
     buildFeatures {
+        compose = true
         viewBinding = true
     }
 
@@ -34,6 +36,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -52,6 +58,16 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
 
+
+    implementation("androidx.activity:activity-compose:1.9.1")
+    implementation(platform("androidx.compose:compose-bom:2024.08.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+
+
+
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
 
@@ -68,6 +84,7 @@ dependencies {
     implementation(project(":admobAds:nativeAds"))
     implementation(project(":admobAds:rewadedAd"))
     implementation(project(":admobAds:rewardedInterAds"))
+    implementation("io.insert-koin:koin-androidx-compose:3.5.6")
 //    implementation("com.ikame.android-sdk:ikm-android-sdk-release:3.0.140-beta")
 
 

@@ -1,6 +1,7 @@
 package com.example.adsxml
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import com.example.adsxml.databinding.ActivityMainBinding
 import com.monetization.core.firebase.Sdk
@@ -9,29 +10,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        CoroutineScope(Dispatchers.IO).launch {
-            var count = 0
-            while (true) {
-                count += 1
-                delay(1000)
-                Sdk.sendEvent(this@MainActivity, "Hi Hello $count")
-                Sdk.log(
-                    if (count % 5 == 0) {
-                        "cvv$count"
-                    } else {
-                        "cvv"
-                    },
-                    "Hi Log $count", isError = count % 2 == 0
-                )
-            }
-        }
 
 
     }

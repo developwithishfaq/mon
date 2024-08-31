@@ -15,7 +15,7 @@ object PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARD
         activity: Activity,
         requestNewIfNotAvailable: Boolean = true,
         requestNewIfAdShown: Boolean = true,
-        handlerDelay: Long = 1000,
+        normalLoadingTime: Long = 1000,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
         onAdDismiss: (Boolean, Boolean) -> Unit,
     ) {
@@ -25,7 +25,7 @@ object PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARD
             activity = activity,
             requestNewIfNotAvailable = requestNewIfNotAvailable,
             placementKey = placementKey,
-            normalLoadingTime = handlerDelay,
+            normalLoadingTime = normalLoadingTime,
             controller = controller,
             onLoadingDialogStatusChange = onLoadingDialogStatusChange,
             onAdDismiss = { shown ->

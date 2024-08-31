@@ -6,7 +6,6 @@ import com.monetization.appopen.AdmobAppOpenAdsManager
 import com.monetization.core.AdmobBasePreloadAdsManager
 import com.monetization.core.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
-import com.monetization.core.commons.AdsCommons
 
 object PreloadAppOpenAdsManager : AdmobBasePreloadAdsManager(AdType.AppOpen) {
 
@@ -16,7 +15,7 @@ object PreloadAppOpenAdsManager : AdmobBasePreloadAdsManager(AdType.AppOpen) {
         activity: Activity,
         requestNewIfNotAvailable: Boolean = true,
         requestNewIfAdShown: Boolean = true,
-        handlerDelay: Long = 1000,
+        normalLoadingTime: Long = 1000,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
         showBlackBg: (Boolean) -> Unit,
         onAdDismiss: (Boolean) -> Unit,
@@ -27,7 +26,7 @@ object PreloadAppOpenAdsManager : AdmobBasePreloadAdsManager(AdType.AppOpen) {
             activity = activity,
             requestNewIfNotAvailable = requestNewIfNotAvailable,
             placementKey = placementKey,
-            normalLoadingTime = handlerDelay,
+            normalLoadingTime = normalLoadingTime,
             controller = controller,
             onLoadingDialogStatusChange = onLoadingDialogStatusChange,
             onAdDismiss = onAdDismiss,
@@ -42,7 +41,7 @@ object PreloadAppOpenAdsManager : AdmobBasePreloadAdsManager(AdType.AppOpen) {
                         ) {
                             showBlackBg.invoke(false)
                             onFreeAd(true)
-                            if (requestNewIfAdShown) {
+                            if (requestNewIfAdShown && adShown) {
                                 controller.loadAd(activity, "", null)
                             }
                         }

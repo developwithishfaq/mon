@@ -39,6 +39,14 @@ class AdsUiWidget @JvmOverloads constructor(
     private var adEnabled: Boolean = false
     private var adsWidgetDataModel: AdsWidgetData? = null
 
+    fun isAdPopulated(forNative: Boolean): Boolean {
+        return if (forNative) {
+            nativeWidget.adPopulated()
+        } else {
+            bannerWidget.adPopulated()
+        }
+    }
+
     fun setWidgetKey(key: String, adsWidgetData: AdsWidgetData?, defEnabled: Boolean = true) {
         this.widgetKey = key
 

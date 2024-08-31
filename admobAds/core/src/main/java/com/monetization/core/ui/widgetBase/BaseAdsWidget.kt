@@ -169,6 +169,9 @@ abstract class BaseAdsWidget<T : AdsControllerBaseHelper> @JvmOverloads construc
         }
     }
 
+    fun adPopulated(): Boolean {
+        return adPopulated
+    }
 
     fun setInPause(check: Boolean) {
         logAds("setInPause($key)=$check")

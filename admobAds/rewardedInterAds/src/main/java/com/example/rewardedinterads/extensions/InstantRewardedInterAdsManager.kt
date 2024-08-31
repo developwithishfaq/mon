@@ -4,6 +4,7 @@ import android.app.Activity
 import com.example.rewardedinterads.AdmobRewardedInterAd
 import com.example.rewardedinterads.AdmobRewardedInterAdsManager
 import com.monetization.core.AdmobBaseInstantAdsManager
+import com.monetization.core.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
 
 object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARDED_INTERSTITIAL) {
@@ -16,6 +17,7 @@ object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARD
         normalLoadingTime: Long = 1_000,
         instantLoadingTime: Long = 8_000,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
+        onRewarded: (Boolean) -> Unit,
         onAdDismiss: ((Boolean) -> Unit)? = null,
     ) {
         val controller = AdmobRewardedInterAdsManager.getAdController(key)
@@ -30,7 +32,16 @@ object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARD
             showAd = {
                 (controller?.getAvailableAd() as? AdmobRewardedInterAd)?.showAd(
                     activity,
-                    fullScreenAdListener
+                    object : FullScreenAdsShowListener {
+                        override fun onAdDismiss(
+                            adKey: String,
+                            adShown: Boolean,
+                            rewardEarned: Boolean,
+                        ) {
+                            onRewarded.invoke(rewardEarned)
+                            onFreeAd(true)
+                        }
+                    }
                 )
             }
         )

@@ -92,11 +92,6 @@ abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
         onDismissListener = onAdDismiss
 
         val key = controller?.getAdKey() ?: ""
-        if (SdkConfigs.canShowAds(key, adType).not()) {
-            logAds("Ad is restricted by Sdk to show Key=$key,type=$adType", true)
-            onFreeAd()
-            return
-        }
 
         if (enable.not()) {
             logAds("Ad is not enabled Key=$key,placement=$placementKey,type=$adType", true)
@@ -108,8 +103,13 @@ abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
             onFreeAd()
             return
         }
+        if (SdkConfigs.canShowAds(key, adType).not()) {
+            logAds("Ad is restricted by Sdk to show Key=$key,type=$adType", true)
+            onFreeAd()
+            return
+        }
         isHandlerRunning = false
-        if (normalLoadingTime > 0) {
+        if (normalLoadingTime > 0 || instantLoadingTime > 0) {
             loadingDialogListener?.invoke(true)
         }
         nowShowAd(

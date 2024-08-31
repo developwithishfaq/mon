@@ -22,7 +22,7 @@ abstract class AdmobBasePreloadAdsManager(
         isFullScreenAdShowing = false
     }
 
-    fun allowed(key: String): Boolean {
+    private fun allowed(key: String): Boolean {
         val allowed = SdkConfigs.canShowAds(key, adType)
         if (allowed.not()) {
             logAds("Ad is restricted by Sdk to show Key=$key,type=$adType", true)
@@ -41,33 +41,31 @@ abstract class AdmobBasePreloadAdsManager(
         showAd: () -> Unit,
     ) {
         val enabled = placementKey.isAdEnabled()
-        if (AdsCommons.isFullScreenAdShowing) {
-            logAds("Full Screen Ad is already showing")
+        if (isFullScreenAdShowing) {
+            logAds("Full Screen Ad is already showing", true)
             return
         }
         loadingDialogListener = onLoadingDialogStatusChange
         onDismissListener = onAdDismiss
         val key = controller?.getAdKey() ?: ""
         val availableAd = controller?.getAvailableAd()
-
-        if (allowed(key).not()) {
+        if (controller == null) {
+            logAds("No Controller Found Against $key,$adType", true)
             onFreeAd()
             return
         }
         if (enabled.not()) {
+            logAds("$adType:$key,is not enabled", true)
             onFreeAd()
             return
         }
         if (requestNewIfNotAvailable && availableAd == null) {
-            controller?.loadAd(activity, "", null)
+            logAds("$adType:$key,New Ad Request as no ad is available to show", true)
+            controller.loadAd(activity, "", null)
             onFreeAd()
             return
         }
-        if (availableAd == null) {
-            onFreeAd()
-            return
-        }
-        if (controller.getAvailableAd() == null) {
+        if (allowed(key).not()) {
             onFreeAd()
             return
         }
@@ -93,6 +91,7 @@ abstract class AdmobBasePreloadAdsManager(
                 showAd.invoke()
             }, normalLoadingTime)
         } else {
+            logAds("$adType:No Ad is available to show", true)
             onFreeAd()
         }
     }
