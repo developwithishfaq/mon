@@ -24,6 +24,7 @@ class SdkBannerViewModel : ViewModel() {
     }
 
     fun destroyAdByKey(adKey: String, removeIfShown: Boolean = true) {
+
         val mapp = state.value.adWidgetMap.toMutableMap()
         val oldSize = mapp.size
         if (removeIfShown) {
