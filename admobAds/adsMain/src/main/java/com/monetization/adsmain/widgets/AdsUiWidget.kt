@@ -121,15 +121,19 @@ class AdsUiWidget @JvmOverloads constructor(
         requestNewOnShow: Boolean = true,
     ) {
         removeAndAdNativeWidget()
-        nativeWidget.showNativeAdmob(
-            activity = activity,
-            adKey = adKey,
-            adLayout = adLayout,
-            enabled = adEnabled,
-            shimmerInfo = shimmerInfo,
-            oneTimeUse = oneTimeUse,
-            requestNewOnShow = requestNewOnShow
-        )
+        try {
+            nativeWidget.showNativeAdmob(
+                activity = activity,
+                adKey = adKey,
+                adLayout = adLayout,
+                enabled = adEnabled,
+                shimmerInfo = shimmerInfo,
+                oneTimeUse = oneTimeUse,
+                requestNewOnShow = requestNewOnShow
+            )
+        } catch (_: Exception) {
+
+        }
     }
 
 
@@ -142,15 +146,19 @@ class AdsUiWidget @JvmOverloads constructor(
         requestNewOnShow: Boolean = true,
     ) {
         removeAndAdBannerWidget()
-        bannerWidget.showBannerAdmob(
-            activity = activity,
-            adKey = adKey,
-            bannerAdType = bannerAdType,
-            enabled = adEnabled,
-            shimmerInfo = shimmerInfo,
-            oneTimeUse = oneTimeUse,
-            requestNewOnShow = requestNewOnShow
-        )
+        try {
+            bannerWidget.showBannerAdmob(
+                activity = activity,
+                adKey = adKey,
+                bannerAdType = bannerAdType,
+                enabled = adEnabled,
+                shimmerInfo = shimmerInfo,
+                oneTimeUse = oneTimeUse,
+                requestNewOnShow = requestNewOnShow
+            )
+        } catch (_: Exception) {
+
+        }
     }
 
     private fun removeAndAdNativeWidget() {

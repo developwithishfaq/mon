@@ -65,6 +65,11 @@ abstract class AdmobBasePreloadAdsManager(
             onFreeAd()
             return
         }
+        if (availableAd == null){
+            logAds("$adType:$key, No Ad To Show, Please Request an ad First", true)
+            onFreeAd()
+            return
+        }
         if (allowed(key).not()) {
             onFreeAd()
             return
@@ -92,6 +97,7 @@ abstract class AdmobBasePreloadAdsManager(
             }, normalLoadingTime)
         } else {
             logAds("$adType:No Ad is available to show", true)
+            loadingDialogListener?.invoke(false)
             onFreeAd()
         }
     }

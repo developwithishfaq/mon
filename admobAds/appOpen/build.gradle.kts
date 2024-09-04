@@ -57,7 +57,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.developwithishfaq"
                 artifactId = "appOpen"
-                version = "2.1"
+                version = "2.1.1"
             }
         }
     }

@@ -22,6 +22,7 @@ class AdmobSplashAdController constructor(
 
     private var splashAdType: SplashAdType = SplashAdType.None
     private var enabled: Boolean = false
+    private var mLifecycle: Lifecycle? = null
     private var isScreenInPause: Boolean = false
     private var isHandlerRunning: Boolean = false
     private var splashAdLoaded: Boolean = false
@@ -47,6 +48,7 @@ class AdmobSplashAdController constructor(
         this.listener = callBack
         this.activity = activity
         this.splashAdType = adType
+        this.mLifecycle = lifecycle
         this.splashAdTime = timeInMillis
         this.enabled = enable
         this.isScreenInPause = false
@@ -59,8 +61,8 @@ class AdmobSplashAdController constructor(
                 onAdDismissed("Not Enabled $adType")
             }, 2000)
         } else {
-            if (lifecycle.currentState != Lifecycle.State.DESTROYED) {
-                lifecycle.addObserver(this)
+            if (mLifecycle?.currentState != Lifecycle.State.DESTROYED) {
+                mLifecycle?.addObserver(this)
             }
             startLoadingAds(activity)
         }
@@ -217,7 +219,8 @@ class AdmobSplashAdController constructor(
 
     private fun onAdDismissed(key: String) {
         listener?.onAdDismiss(key)
-        isHandlerRunning = false
+            isHandlerRunning = false
+        mLifecycle?.removeObserver(this)
         listener = null
         removeCallBacks()
     }
