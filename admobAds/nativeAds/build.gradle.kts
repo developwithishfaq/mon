@@ -79,7 +79,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.developwithishfaq"
                 artifactId = "nativeAds"
-                version = "2.1.1"
+                version = "2.1.2"
             }
         }
     }

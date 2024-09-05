@@ -75,7 +75,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.developwithishfaq"
                 artifactId = "composeViews"
-                version = "2.1.1"
+                version = "2.1.2"
             }
         }
     }
