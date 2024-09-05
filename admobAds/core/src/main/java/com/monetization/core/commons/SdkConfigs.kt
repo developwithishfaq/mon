@@ -58,7 +58,7 @@ object SdkConfigs {
             logAds("All Ads Are Disabled by developer", true)
             return false
         } else {
-            return sdkListener?.canShowAd(adType, adKey) ?: false
+            return sdkListener?.canLoadAd(adType, adKey) ?: false
         }
     }
 

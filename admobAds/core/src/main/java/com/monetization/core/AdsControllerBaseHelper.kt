@@ -67,6 +67,10 @@ abstract class AdsControllerBaseHelper(
                 "You Blocked Request Of $adType Ads,Key=$adKey",
                 true
             )
+        } else {
+            logAds(
+                "$adType Request Allowed of key=$adKey"
+            )
         }
         return canLoadAd
     }
