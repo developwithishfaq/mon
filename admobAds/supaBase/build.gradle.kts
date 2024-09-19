@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-//    id("org.jetbrains.kotlin.plugin.compose")
     kotlin("plugin.serialization") version "2.0.20"
+    id("maven-publish")
 }
 
 android {
@@ -49,4 +49,18 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.1")
     implementation("io.ktor:ktor-client-okhttp:2.3.10")
     implementation(project(":admobAds:core"))
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "com.github.developwithishfaq"
+                artifactId = "supaBase"
+                version = "2.1.3"
+            }
+        }
+    }
 }

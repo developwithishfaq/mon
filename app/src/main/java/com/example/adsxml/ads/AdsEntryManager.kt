@@ -15,6 +15,21 @@ object AdsEntryManager {
 
     fun initAds(context: Context, supaBase: SdkSupaBase) {
         val listener = object : ControllersListener {
+            override fun onAdImpression(
+                adKey: String,
+                adType: AdType,
+                dataMap: HashMap<String, String>
+            ) {
+                val controller = adType.getAdController(adKey)!!
+                supaBase.onAdImpression(
+                    userId = SdkConfigs.getUserId(context),
+                    adId = controller.getAdId(),
+                    adKey = adKey,
+                    adType = adType,
+                    dataMap = dataMap,
+                )
+                super.onAdImpression(adKey, adType, dataMap)
+            }
             override fun onAdFailed(
                 adKey: String,
                 adType: AdType,

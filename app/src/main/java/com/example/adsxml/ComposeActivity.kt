@@ -56,7 +56,7 @@ class ComposeActivity : ComponentActivity() {
             }
             Column {
                 Button(onClick = {
-                    AdType.INTERSTITIAL.loadAd("Main", this@ComposeActivity)
+//                    AdType.INTERSTITIAL.loadAd("Main", this@ComposeActivity)
                     showDialog = true
                 }) {
 

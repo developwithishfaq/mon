@@ -28,12 +28,12 @@ class SdkSupaBase(
 ) {
     private var supaUrl = "https://dnbsjqscqvhpfgpdxzma.supabase.co"
     private var supaKey =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuYnNqcXNjcXZocGZncGR4em1hIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjU2NTA5OCwiZXhwIjoyMDQyMTQxMDk4fQ.2jw2TonHK_qbNaycn2kzSrLtOHYVrzvA3MRR9Co1o9o"
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuYnNqcXNjcXZocGZncGR4em1hIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjU2NTA5OCwiZXhwIjoyMDQyMTQxMDk4fQ.2jw2TonHK_qbNaycn2kzSrLtOHYVrzvA3MRR9Co1o9o"
     private var requestTableName = "Requests"
 
     private val backupKey = "BackupsTable"
     private var projectName = ""
-    private var ipAddressRequestScenario: IpAddressScenario = IpAddressScenario.OneTimeOnly
+    private var ipAddressRequestScenario: IpAddressScenario = IpAddressScenario.None
     private var supaClient: SupabaseClient? = null
 
     private val prefs = context.getSharedPreferences("SdkSupa", Context.MODE_PRIVATE)
@@ -123,8 +123,12 @@ class SdkSupaBase(
                     (ipAddressRequestScenario as IpAddressScenario.RequestAfterEvery).millis
                 currentDelay > delayAllowed || lastTimeIpAddressLoaded.second == null
             }
+
+            IpAddressScenario.None -> {
+                false
+            }
         }
-        return if (canLoadIp || (isIpLoadedOneTime().not())) {
+        return if (canLoadIp) {
             withContext(Dispatchers.IO) {
                 try {
                     val ipAddress =
