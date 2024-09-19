@@ -1,6 +1,7 @@
 package com.example.adsxml.base
 
 import android.app.Application
+import com.easy.supabase.SdkSupaBase
 import com.example.debug.DebugListener
 import com.example.debug.SdkDebugHelper
 import com.monetization.composeviews.statefull.nativeAd.SdkNativeViewModel
@@ -20,6 +21,9 @@ class BaseApp : Application() {
         val module = module {
             viewModel {
                 SdkNativeViewModel()
+            }
+            single {
+                SdkSupaBase(get())
             }
         }
         startKoin {

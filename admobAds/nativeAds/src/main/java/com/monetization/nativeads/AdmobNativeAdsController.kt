@@ -31,7 +31,7 @@ class AdmobNativeAdsController(
         if (commonLoadChecks.not()) {
             return
         }
-        val adId = getAdId()
+        val adId = getAdIdAndIncrementIndex()
         val adLoader = AdLoader.Builder(activity, adId).forNativeAd { nativeAd: NativeAd ->
             currentNativeAd?.destroyAd(activity)
             currentNativeAd = AdmobNativeAd(getAdKey(), nativeAd)
@@ -67,7 +67,7 @@ class AdmobNativeAdsController(
     }
 
     override fun destroyAd(activity: Activity?) {
-        logAds("Native Ad(${getAdKey()}) Destroyed,Id=${getAdId()}",true)
+        logAds("Native Ad(${getAdKey()}) Destroyed,Id=${getAdIdAndIncrementIndex()}",true)
         currentNativeAd = null
     }
 

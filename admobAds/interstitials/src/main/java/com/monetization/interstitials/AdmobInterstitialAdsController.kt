@@ -2,7 +2,6 @@ package com.monetization.interstitials
 
 import android.app.Activity
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
@@ -30,7 +29,7 @@ class AdmobInterstitialAdsController(
         if (commonLoadChecks.not()) {
             return
         }
-        val adId = getAdId()
+        val adId = getAdIdAndIncrementIndex()
 
         InterstitialAd.load(activity,
             adId,
@@ -62,7 +61,7 @@ class AdmobInterstitialAdsController(
     }
 
     override fun destroyAd(activity: Activity?) {
-        logAds("Inter Ad(${getAdKey()}) Destroyed,Id=${getAdId()}",true)
+        logAds("Inter Ad(${getAdKey()}) Destroyed,Id=${getAdIdAndIncrementIndex()}",true)
         currentInterstitialAd = null
     }
 

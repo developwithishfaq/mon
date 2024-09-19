@@ -77,7 +77,7 @@ class AdmobSplashAdController constructor(
                 logAds("Splash Ad onAdLoaded ,Handler Running=$isHandlerRunning")
                 if (isHandlerRunning) {
                     removeCallBacks()
-                    showSplashAd(activity)
+                    showSplashAd(activity, adKey)
                 }
             }
 
@@ -99,7 +99,8 @@ class AdmobSplashAdController constructor(
 
 
     private var isInterShowing = false
-    private fun showSplashAd(activity: Activity) {
+    private fun showSplashAd(activity: Activity, adKey: String) {
+        listener?.onAdShown(adKey)
         logAds("showSplashAd Ad Type=$splashAdType")
         val fullScreenAdsShowListener = object : FullScreenAdsShowListener {
             override fun onAdDismiss(adKey: String, adShown: Boolean, rewardEarned: Boolean) {
@@ -219,7 +220,7 @@ class AdmobSplashAdController constructor(
 
     private fun onAdDismissed(key: String) {
         listener?.onAdDismiss(key)
-            isHandlerRunning = false
+        isHandlerRunning = false
         mLifecycle?.removeObserver(this)
         listener = null
         removeCallBacks()
@@ -261,7 +262,7 @@ class AdmobSplashAdController constructor(
                         onAdDismissed(splashAdType.toString())
                     } else if (splashAdLoaded && isInterShowing.not()) {
                         activity?.let {
-                            showSplashAd(it)
+                            showSplashAd(it, "Splash Ad On Resume")
                         }
                     }
                 }, 1000)

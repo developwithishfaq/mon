@@ -5,19 +5,27 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import com.example.appupdate.AppUpdateHelper
 import com.example.appupdate.SdkUpdateListener
+import com.example.rewadedad.AdmobRewardedAdsManager
+import com.example.rewardedinterads.AdmobRewardedInterAdsManager
 import com.monetization.adsmain.widgets.AdsUiWidget
+import com.monetization.appopen.AdmobAppOpenAdsManager
+import com.monetization.bannerads.AdmobBannerAdsManager
 import com.monetization.bannerads.BannerAdSize
 import com.monetization.bannerads.BannerAdType
+import com.monetization.core.AdsController
+import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ui.AdsWidgetData
 import com.monetization.core.ui.LayoutInfo
 import com.monetization.core.ui.ShimmerInfo
+import com.monetization.interstitials.AdmobInterstitialAdsManager
+import com.monetization.nativeads.AdmobNativeAdsManager
 
 
 fun AppUpdateHelper.checkAndStartUpdate(
     activity: ComponentActivity,
     onDismiss: (Boolean) -> Unit,
 ) {
-    AppUpdateHelper.checkAndStartUpdate(activity,object : SdkUpdateListener {
+    AppUpdateHelper.checkAndStartUpdate(activity, object : SdkUpdateListener {
         override fun onUpdateFailed(reason: String) {
             onDismiss.invoke(false)
         }

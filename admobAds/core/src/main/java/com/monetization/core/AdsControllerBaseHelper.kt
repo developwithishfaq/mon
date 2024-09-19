@@ -39,7 +39,16 @@ abstract class AdsControllerBaseHelper(
 
     private var loadingStateListener: AdsLoadingStatusListener? = null
 
-    fun getAdId(): String {
+
+    override fun getAdId(): String {
+        return try {
+            adIdsList[indexOfId]
+        } catch (_: Exception) {
+            adIdsList[0]
+        }
+    }
+
+    fun getAdIdAndIncrementIndex(): String {
         val adId = AdsCommons.getAdId(indexOfId, adIdsList, adType) {
             indexOfId += 1
         }

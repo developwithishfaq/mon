@@ -2,7 +2,6 @@ package com.monetization.appopen
 
 import android.app.Activity
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.monetization.core.AdsControllerBaseHelper
@@ -10,8 +9,6 @@ import com.monetization.core.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ad_units.core.AdUnit
 import com.monetization.core.listeners.ControllersListener
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 
 class AdmobAppOpenAdsController(
     adKey: String,
@@ -29,7 +26,7 @@ class AdmobAppOpenAdsController(
         if (commonLoadChecks.not()) {
             return
         }
-        val adId = getAdId()
+        val adId = getAdIdAndIncrementIndex()
         val request = AdRequest.Builder().build()
         AppOpenAd.load(
             activity, adId, request,

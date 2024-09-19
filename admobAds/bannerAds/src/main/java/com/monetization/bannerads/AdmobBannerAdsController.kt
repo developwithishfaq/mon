@@ -12,7 +12,6 @@ import com.monetization.core.AdsControllerBaseHelper
 import com.monetization.core.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ad_units.core.AdUnit
-import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.listeners.ControllersListener
 
 class AdmobBannerAdsController(
@@ -33,7 +32,7 @@ class AdmobBannerAdsController(
         if (commonLoadChecks.not()) {
             return
         }
-        val adId = getAdId()
+        val adId = getAdIdAndIncrementIndex()
         val adView = AdView(activity);
         adView.adUnitId = adId
         val extras = Bundle()

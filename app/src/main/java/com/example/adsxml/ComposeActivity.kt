@@ -11,15 +11,27 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Dialog
+import com.easy.supabase.SdkSupaBase
+import com.example.adsxml.ads.AdsEntryManager
+import com.monetization.adsmain.commons.loadAd
 import com.monetization.composeviews.SdkNativeAd
 import com.monetization.composeviews.statefull.nativeAd.SdkNativeViewModel
+import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.NativeTemplates
+import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
 import video.downloader.remoteconfig.SdkRemoteConfigConstants.toConfigString
 
 class ComposeActivity : ComponentActivity() {
+
+    private val supaBase: SdkSupaBase by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        AdsEntryManager.initAds(this, supaBase)
+        supaBase.initSupaBase("2341234123412341")
+        
         setContent {
             val sdkNativeViewModel: SdkNativeViewModel = koinViewModel()
             var showDialog by rememberSaveable {
@@ -34,7 +46,7 @@ class ComposeActivity : ComponentActivity() {
                         SdkNativeAd(
                             activity = this,
                             adLayout = NativeTemplates.LargeNative,
-                            adKey = "Test",
+                            adKey = "Main",
                             placementKey = true.toConfigString(),
                             showNewAdEveryTime = true,
                             sdkNativeViewModel = sdkNativeViewModel
@@ -44,6 +56,7 @@ class ComposeActivity : ComponentActivity() {
             }
             Column {
                 Button(onClick = {
+                    AdType.INTERSTITIAL.loadAd("Main", this@ComposeActivity)
                     showDialog = true
                 }) {
 

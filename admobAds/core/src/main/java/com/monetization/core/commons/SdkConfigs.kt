@@ -1,14 +1,30 @@
 package com.monetization.core.commons
 
-import com.monetization.core.BuildConfig
+import android.content.Context
+import com.facebook.shimmer.BuildConfig
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.listeners.SdkListener
+import java.util.UUID
 
 object SdkConfigs {
 
     private var isTestModeEnabled = BuildConfig.DEBUG
     private var disableAllAds = false
+
+
+
+    fun getUserId(context: Context): String {
+        val prefs = context.getSharedPreferences("sdkPrefs", Context.MODE_PRIVATE)
+        var userId = prefs.getString("userId", "") ?: ""
+        if (userId.isNotBlank()) {
+            return userId
+        } else {
+            userId = UUID.randomUUID().toString()
+            prefs.edit().putString("userId", userId).apply()
+            return userId
+        }
+    }
 
     fun isTestMode(): Boolean {
         return isTestModeEnabled

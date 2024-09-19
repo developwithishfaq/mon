@@ -57,6 +57,8 @@ dependencies {
     implementation(project(":admobAds:firebaseConfig"))
     implementation(project(":admobAds:interstitials"))
     implementation(project(":admobAds:nativeAds"))
+    implementation(project(":admobAds:rewadedAd"))
+    implementation(project(":admobAds:rewardedInterAds"))
 }
 
 afterEvaluate {
