@@ -28,7 +28,7 @@ class SdkSupaBase(
 ) {
     private var supaUrl = "https://dnbsjqscqvhpfgpdxzma.supabase.co"
     private var supaKey =
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuYnNqcXNjcXZocGZncGR4em1hIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjU2NTA5OCwiZXhwIjoyMDQyMTQxMDk4fQ.2jw2TonHK_qbNaycn2kzSrLtOHYVrzvA3MRR9Co1o9o"
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuYnNqcXNjcXZocGZncGR4em1hIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcyNjU2NTA5OCwiZXhwIjoyMDQyMTQxMDk4fQ.2jw2TonHK_qbNaycn2kzSrLtOHYVrzvA3MRR9Co1o9o"
     private var requestTableName = "Requests"
 
     private val backupKey = "BackupsTable"
@@ -52,7 +52,7 @@ class SdkSupaBase(
 
 
     fun initSupaBase(
-        appId: String,
+        projectName: String,
         requestTableName: String = "Requests",
         supabaseUrl: String = "",
         supaBaseKey: String = "",
@@ -66,7 +66,7 @@ class SdkSupaBase(
         }
         this.ipAddressRequestScenario = ipAddressScenario
         this.requestTableName = requestTableName
-        this.projectName = appId
+        this.projectName = projectName
 
         checkForFailures()
 
@@ -76,7 +76,7 @@ class SdkSupaBase(
         Handler(Looper.getMainLooper()).postDelayed({
             CoroutineScope(Dispatchers.IO).launch {
                 getBackupRequestList().forEach {
-                    insertModel(table = requestTableName, model = it)
+                    insertModel(table = requestTableName, request = it, false)
                 }
             }
             checkForFailures()
@@ -170,22 +170,21 @@ class SdkSupaBase(
         isSdkInitialized {
             val requestTime = System.currentTimeMillis()
             CoroutineScope(Dispatchers.IO).launch {
-                getPublicIp()?.let { ipAddress ->
-                    insertModel(
-                        table = requestTableName,
-                        model = SupaRequestModel(
-                            userId = userId,
-                            adKey = adKey,
-                            adUnit = adId,
-                            adType = adType.name,
-                            ip = ipAddress,
-                            dataMap = dataMap.toModelList(),
-                            historyType = "loaded",
-                            time = requestTime,
-                            projectName = projectName
-                        )
+                insertModel(
+                    table = requestTableName,
+                    request = SupaRequestModel(
+                        userId = userId,
+                        adKey = adKey,
+                        adUnit = adId,
+                        adType = adType.name,
+                        ip = "",
+                        dataMap = dataMap.toModelList(),
+                        historyType = "loaded",
+                        time = requestTime,
+                        projectName = projectName
                     )
-                }
+                )
+
             }
         }
     }
@@ -202,24 +201,22 @@ class SdkSupaBase(
         isSdkInitialized {
             val requestTime = System.currentTimeMillis()
             CoroutineScope(Dispatchers.IO).launch {
-                getPublicIp()?.let { ipAddress ->
-                    insertModel(
-                        table = requestTableName,
-                        model = SupaRequestModel(
-                            userId = userId,
-                            adKey = adKey,
-                            adUnit = adId,
-                            adType = adType.name,
-                            ip = ipAddress,
-                            dataMap = dataMap.toModelList(),
-                            historyType = "failed",
-                            time = requestTime,
-                            projectName = projectName,
-                            error = errorCode,
-                            message = message
-                        )
+                insertModel(
+                    table = requestTableName,
+                    request = SupaRequestModel(
+                        userId = userId,
+                        adKey = adKey,
+                        adUnit = adId,
+                        adType = adType.name,
+                        ip = "",
+                        dataMap = dataMap.toModelList(),
+                        historyType = "failed",
+                        time = requestTime,
+                        projectName = projectName,
+                        error = errorCode,
+                        message = message
                     )
-                }
+                )
             }
         }
     }
@@ -234,26 +231,51 @@ class SdkSupaBase(
         isSdkInitialized {
             val requestTime = System.currentTimeMillis()
             CoroutineScope(Dispatchers.IO).launch {
-                getPublicIp()?.let { ipAddress ->
-                    insertModel(
-                        table = requestTableName,
-                        model = SupaRequestModel(
-                            userId = userId,
-                            adKey = adKey,
-                            adUnit = adId,
-                            adType = adType.name,
-                            ip = ipAddress,
-                            dataMap = dataMap.toModelList(),
-                            historyType = "impression",
-                            time = requestTime,
-                            projectName = projectName
-                        )
+                insertModel(
+                    table = requestTableName,
+                    request = SupaRequestModel(
+                        userId = userId,
+                        adKey = adKey,
+                        adUnit = adId,
+                        adType = adType.name,
+                        ip = "",
+                        dataMap = dataMap.toModelList(),
+                        historyType = "impression",
+                        time = requestTime,
+                        projectName = projectName
                     )
-                }
+                )
             }
         }
     }
 
+    fun onAdClick(
+        userId: String,
+        adId: String,
+        adKey: String,
+        adType: AdType,
+        dataMap: HashMap<String, String>
+    ) {
+        isSdkInitialized {
+            CoroutineScope(Dispatchers.IO).launch {
+                val requestTime = System.currentTimeMillis()
+                insertModel(
+                    table = requestTableName,
+                    request = SupaRequestModel(
+                        userId = userId,
+                        adKey = adKey,
+                        adUnit = adId,
+                        adType = adType.name,
+                        ip = "",
+                        dataMap = dataMap.toModelList(),
+                        historyType = "clicked",
+                        time = requestTime,
+                        projectName = projectName
+                    )
+                )
+            }
+        }
+    }
     fun onAdRequested(
         userId: String,
         adId: String,
@@ -264,28 +286,38 @@ class SdkSupaBase(
         isSdkInitialized {
             CoroutineScope(Dispatchers.IO).launch {
                 val requestTime = System.currentTimeMillis()
-                getPublicIp()?.let { ipAddress ->
-                    insertModel(
-                        table = requestTableName,
-                        model = SupaRequestModel(
-                            userId = userId,
-                            adKey = adKey,
-                            adUnit = adId,
-                            adType = adType.name,
-                            ip = ipAddress,
-                            dataMap = dataMap.toModelList(),
-                            historyType = "request",
-                            time = requestTime,
-                            projectName = projectName
-                        )
+                insertModel(
+                    table = requestTableName,
+                    request = SupaRequestModel(
+                        userId = userId,
+                        adKey = adKey,
+                        adUnit = adId,
+                        adType = adType.name,
+                        ip = "",
+                        dataMap = dataMap.toModelList(),
+                        historyType = "request",
+                        time = requestTime,
+                        projectName = projectName
                     )
-                }
+                )
             }
         }
     }
 
-    private suspend fun insertModel(table: String, model: SupaRequestModel): String? {
+    private suspend fun insertModel(
+        table: String,
+        request: SupaRequestModel,
+        fetchIp: Boolean = true
+    ): String? {
         return try {
+            val model = if (fetchIp) {
+                val ipAddress = getPublicIp() ?: kotlin.run { "0.0.0" }
+                request.copy(
+                    ip = ipAddress
+                )
+            } else {
+                request
+            }
             withContext(Dispatchers.IO) {
                 val response = getSupaBaseClient()
                     .from(table)
@@ -295,7 +327,7 @@ class SdkSupaBase(
                 response
             }
         } catch (_: Exception) {
-            addItemInBackup(model)
+            addItemInBackup(request)
             null
         }
     }
