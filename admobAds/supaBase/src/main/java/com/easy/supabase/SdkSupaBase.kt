@@ -8,6 +8,8 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.rpc
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.okhttp.OkHttp
@@ -276,6 +278,7 @@ class SdkSupaBase(
             }
         }
     }
+
     fun onAdRequested(
         userId: String,
         adId: String,
@@ -318,6 +321,7 @@ class SdkSupaBase(
             } else {
                 request
             }
+
             withContext(Dispatchers.IO) {
                 val response = getSupaBaseClient()
                     .from(table)

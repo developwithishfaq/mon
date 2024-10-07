@@ -26,6 +26,10 @@ fun String.loadAd(adType: AdType, activity: Activity, listener: AdsLoadingStatus
     getAdController(adType)?.loadAd(activity, "", listener)
 }
 
+fun String.destroyAd(adType: AdType, activity: Activity? = null) {
+    getAdController(adType)?.destroyAd(activity)
+}
+
 fun AdType.loadAd(key: String, activity: Activity, listener: AdsLoadingStatusListener? = null) {
     getAdController(key)?.loadAd(activity, "", listener)
 }

@@ -83,7 +83,7 @@ dependencies {
     implementation(project(":admobAds:interstitials"))
     implementation(project(":admobAds:nativeAds"))
     implementation(project(":admobAds:rewadedAd"))
-    implementation(project(":admobAds:supaBase"))
+//    implementation(project(":admobAds:supaBase"))
     implementation(project(":admobAds:rewardedInterAds"))
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
 //    implementation("com.ikame.android-sdk:ikm-android-sdk-release:3.0.140-beta")
