@@ -29,11 +29,13 @@ class AdmobSplashAdController constructor(
     private var splashAdFailed: Boolean = false
     private val handlerAd = Handler(Looper.getMainLooper())
     private var runnableSplash: Runnable? = null
-    private var splashAdTime = 8L
+    private var splashAdTime = 8_000L
+    private var splashNormalLoadingTime = 1_000L
     private var activity: Activity? = null
 
     private var interstitialAd: AdmobInterstitialAd? = null
     private var appOpenAd: AdmobAppOpenAd? = null
+    private var showLoadingDialog: (() -> Unit)? = null
 
 
     fun showSplashAd(
@@ -42,7 +44,9 @@ class AdmobSplashAdController constructor(
         activity: Activity,
         timeInMillis: Long,
         callBack: FullScreenAdsShowListener,
-        lifecycle: Lifecycle
+        lifecycle: Lifecycle,
+        normalLoadingTime: Long = 1_000,
+        normalLoadingDialog: (() -> Unit)? = null
     ) {
         val enable = enableKey.isAdEnabled()
         this.listener = callBack
@@ -50,6 +54,8 @@ class AdmobSplashAdController constructor(
         this.splashAdType = adType
         this.mLifecycle = lifecycle
         this.splashAdTime = timeInMillis
+        this.showLoadingDialog = normalLoadingDialog
+        this.splashNormalLoadingTime = normalLoadingTime
         this.enabled = enable
         this.isScreenInPause = false
         this.isHandlerRunning = false
@@ -77,7 +83,14 @@ class AdmobSplashAdController constructor(
                 logAds("Splash Ad onAdLoaded ,Handler Running=$isHandlerRunning")
                 if (isHandlerRunning) {
                     removeCallBacks()
-                    showSplashAd(activity, adKey)
+                    if (splashNormalLoadingTime > 0) {
+                        showLoadingDialog?.invoke()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            showSplashAd(activity, adKey)
+                        }, splashNormalLoadingTime)
+                    } else {
+                        showSplashAd(activity, adKey)
+                    }
                 }
             }
 
@@ -107,7 +120,7 @@ class AdmobSplashAdController constructor(
                 listener?.onShowBlackBg(adKey, false)
                 if (isInterShowing) {
                     nullAd()
-                    onAdDismissed(adKey)
+                    onAdDismissed(adKey,adShown)
                 }
             }
 
@@ -218,8 +231,8 @@ class AdmobSplashAdController constructor(
 
     }
 
-    private fun onAdDismissed(key: String) {
-        listener?.onAdDismiss(key)
+    private fun onAdDismissed(key: String, adShown: Boolean = false) {
+        listener?.onAdDismiss(key, adShown)
         isHandlerRunning = false
         mLifecycle?.removeObserver(this)
         listener = null

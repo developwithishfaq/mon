@@ -16,6 +16,7 @@ object AdsCommons {
         )
     }
 
+
     fun Activity.getGoodName(): String {
         return localClassName.substringAfterLast(".")
     }

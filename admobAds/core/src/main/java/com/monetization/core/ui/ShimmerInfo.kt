@@ -1,6 +1,6 @@
 package com.monetization.core.ui
 
-import androidx.annotation.LayoutRes
+import android.view.View
 
 sealed class ShimmerInfo(
     open val hideShimmerOnFailure: Boolean = true,
@@ -11,13 +11,8 @@ sealed class ShimmerInfo(
         override val hideShimmerOnFailure: Boolean = true
     ) : ShimmerInfo()
 
-    data class ShimmerLayoutByName(
-        val layoutName: String,
-        override val hideShimmerOnFailure: Boolean = true,
-    ) : ShimmerInfo()
-
-    data class LayoutByXmlView(
-        @LayoutRes val layoutRes: Int,
+    data class ShimmerByView(
+        val layoutView: View?,
         override val hideShimmerOnFailure: Boolean = true,
     ) : ShimmerInfo()
 }

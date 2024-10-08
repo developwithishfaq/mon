@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
-    alias(libs.plugins.compose.compiler)
+//    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -20,7 +20,7 @@ android {
     }
 
     buildFeatures {
-        compose = true
+//        compose = true
         viewBinding = true
     }
 
@@ -34,15 +34,15 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -59,13 +59,12 @@ dependencies {
 
 
 
-    implementation("androidx.activity:activity-compose:1.9.1")
-    implementation(platform("androidx.compose:compose-bom:2024.08.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui.ui)
+    implementation(libs.androidx.compose.ui.ui.graphics)
+    implementation(libs.androidx.compose.ui.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3.material3)
 
 
     implementation(platform(libs.koin.bom))
@@ -76,9 +75,9 @@ dependencies {
     implementation(project(":admobAds:appOpen"))
     implementation(project(":admobAds:appUpdate"))
     implementation(project(":admobAds:bannerAds"))
-    implementation(project(":admobAds:composeViews"))
+//    implementation(project(":admobAds:composeViews"))
     implementation(project(":admobAds:consent"))
-    implementation(project(":admobAds:debug"))
+//    implementation(project(":admobAds:debug"))
     implementation(project(":admobAds:firebaseConfig"))
     implementation(project(":admobAds:interstitials"))
     implementation(project(":admobAds:nativeAds"))

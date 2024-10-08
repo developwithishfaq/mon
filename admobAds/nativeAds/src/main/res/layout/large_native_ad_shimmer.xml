@@ -115,6 +115,7 @@
                         android:background="@color/shimmercolor"
                         android:layout_width="match_parent"
                         android:layout_height="125dp"
+                        android:visibility="gone"
                         android:layout_marginVertical="13dp"
                         android:adjustViewBounds="true"
                         app:layout_constraintBottom_toTopOf="@+id/ad_call_to_action"

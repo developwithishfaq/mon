@@ -5,6 +5,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.monetization.bannerads.AdmobBannerAd
+import com.monetization.bannerads.AdmobBannerAdsController
+import com.monetization.bannerads.AdmobBannerAdsManager
+import com.monetization.bannerads.BannerAdSize
+import com.monetization.bannerads.BannerAdType
 import com.monetization.core.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
@@ -14,11 +19,6 @@ import com.monetization.core.commons.NativeConstants.makeVisible
 import com.monetization.core.commons.NativeConstants.removeViewsFromIt
 import com.monetization.core.ui.ShimmerInfo
 import com.monetization.core.ui.widgetBase.BaseAdsWidget
-import com.monetization.bannerads.AdmobBannerAd
-import com.monetization.bannerads.AdmobBannerAdsController
-import com.monetization.bannerads.AdmobBannerAdsManager
-import com.monetization.bannerads.BannerAdSize
-import com.monetization.bannerads.BannerAdType
 
 class BannerAdWidget @JvmOverloads constructor(
     context: Context,
@@ -59,14 +59,14 @@ class BannerAdWidget @JvmOverloads constructor(
             bannerAdType = bannerAdType,
             calledFrom = "Base Banner Activity",
             callback = object : AdsLoadingStatusListener {
-                override fun onAdLoaded(adKey: String,) {
-                    if (adLoaded){
+                override fun onAdLoaded(adKey: String) {
+                    if (adLoaded) {
                         bannerRefreshed = true
                     }
                     adOnLoaded()
                 }
 
-                override fun onAdFailedToLoad(adKey: String,message: String, code: Int) {
+                override fun onAdFailedToLoad(adKey: String, message: String, code: Int) {
                     adOnFailed()
                 }
             }
@@ -133,18 +133,12 @@ class BannerAdWidget @JvmOverloads constructor(
                 shimmerLayout
             }
 
-            is ShimmerInfo.ShimmerLayoutByName -> {
-                val adLayout = info.layoutName.inflateLayoutByName(activity!!)
-                shimmerLayout?.removeViewsFromIt()
-                shimmerLayout?.addView(adLayout)
-                shimmerLayout
-            }
-
-            is ShimmerInfo.LayoutByXmlView -> {
-                val layout = LayoutInflater.from(activity).inflate(info.layoutRes, null, false)
-                shimmerLayout?.removeViewsFromIt()
-                shimmerLayout?.addView(layout)
-                shimmerLayout
+            is ShimmerInfo.ShimmerByView -> {
+                info.layoutView?.let {
+                    shimmerLayout?.removeViewsFromIt()
+                    shimmerLayout?.addView(it)
+                    shimmerLayout
+                }
             }
 
             ShimmerInfo.None -> {

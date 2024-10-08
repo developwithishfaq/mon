@@ -9,7 +9,6 @@ import com.monetization.core.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.NativeConstants.inflateLayoutByLayoutInfo
-import com.monetization.core.commons.NativeConstants.inflateLayoutByName
 import com.monetization.core.commons.NativeConstants.removeViewsFromIt
 import com.monetization.core.ui.LayoutInfo
 import com.monetization.core.ui.ShimmerInfo
@@ -117,18 +116,12 @@ class NativeAdWidget @JvmOverloads constructor(
                 shimmerLayout
             }
 
-            is ShimmerInfo.ShimmerLayoutByName -> {
-                val adLayout = info.layoutName.inflateLayoutByName(activity!!)
-                shimmerLayout?.removeViewsFromIt()
-                shimmerLayout?.addView(adLayout)
-                shimmerLayout
-            }
-
-            is ShimmerInfo.LayoutByXmlView -> {
-                val layout = LayoutInflater.from(activity).inflate(info.layoutRes, null, false)
-                shimmerLayout?.removeViewsFromIt()
-                shimmerLayout?.addView(layout)
-                shimmerLayout
+            is ShimmerInfo.ShimmerByView -> {
+                info.layoutView?.let {
+                    shimmerLayout?.removeViewsFromIt()
+                    shimmerLayout?.addView(it)
+                    shimmerLayout
+                }
             }
 
             ShimmerInfo.None -> {
