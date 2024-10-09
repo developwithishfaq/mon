@@ -67,7 +67,7 @@ class AdmobNativeAdsController(
     }
 
     override fun destroyAd(activity: Activity?) {
-        logAds("Native Ad(${getAdKey()}) Destroyed,Id=${getAdIdAndIncrementIndex()}",true)
+        logAds("Native Ad(${getAdKey()}) Destroyed,Id=${getAdId()}",true)
         currentNativeAd = null
     }
 

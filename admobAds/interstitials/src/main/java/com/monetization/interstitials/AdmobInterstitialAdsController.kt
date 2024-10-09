@@ -61,7 +61,7 @@ class AdmobInterstitialAdsController(
     }
 
     override fun destroyAd(activity: Activity?) {
-        logAds("Inter Ad(${getAdKey()}) Destroyed,Id=${getAdIdAndIncrementIndex()}",true)
+        logAds("Inter Ad(${getAdKey()}) Destroyed,Id=${getAdId()}",true)
         currentInterstitialAd = null
     }
 

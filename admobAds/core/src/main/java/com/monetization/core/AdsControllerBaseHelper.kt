@@ -44,14 +44,21 @@ abstract class AdsControllerBaseHelper(
         return try {
             adIdsList[indexOfId]
         } catch (_: Exception) {
+            logAds("Exception In getAdId ", true)
             adIdsList[0]
         }
     }
 
     fun getAdIdAndIncrementIndex(): String {
+        val current = indexOfId
         val adId = AdsCommons.getAdId(indexOfId, adIdsList, adType) {
+        }
+        if (indexOfId >= adIdsList.size - 1) {
+            indexOfId = 0
+        } else {
             indexOfId += 1
         }
+        logAds("For Request(current=$current,next=$indexOfId):$adId")
         latestAdIdRequested = adId
         return adId
     }
