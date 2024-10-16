@@ -4,8 +4,8 @@ import android.app.Activity
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.monetization.core.AdsControllerBaseHelper
-import com.monetization.core.FullScreenAdsShowListener
+import com.monetization.core.controllers.AdsControllerBaseHelper
+import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.GeneralInterOrAppOpenAd
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons

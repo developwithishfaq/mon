@@ -1,4 +1,4 @@
-package com.monetization.core
+package com.monetization.core.managers
 
 import android.app.Activity
 import android.os.Handler
@@ -8,7 +8,8 @@ import com.monetization.core.commons.AdsCommons
 import com.monetization.core.commons.AdsCommons.isFullScreenAdShowing
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.SdkConfigs
-import video.downloader.remoteconfig.SdkRemoteConfigConstants.isAdEnabled
+import com.monetization.core.commons.SdkConfigs.isAdEnabled
+import com.monetization.core.controllers.AdsController
 
 abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
 
@@ -83,7 +84,8 @@ abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
         onAdDismiss: ((Boolean) -> Unit)? = null,
         showAd: () -> Unit,
     ) {
-        val enable = placementKey.isAdEnabled()
+        val key = controller?.getAdKey() ?: ""
+        val enable = placementKey.isAdEnabled(key)
         if (AdsCommons.isFullScreenAdShowing) {
             logAds("Full Screen Ad is already showing")
             return
@@ -91,7 +93,6 @@ abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
         loadingDialogListener = onLoadingDialogStatusChange
         onDismissListener = onAdDismiss
 
-        val key = controller?.getAdKey() ?: ""
 
         if (enable.not()) {
             logAds("Ad is not enabled Key=$key,placement=$placementKey,type=$adType", true)

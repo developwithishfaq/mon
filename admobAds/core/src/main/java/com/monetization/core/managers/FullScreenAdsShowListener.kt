@@ -1,4 +1,4 @@
-package com.monetization.core
+package com.monetization.core.managers
 
 interface FullScreenAdsShowListener {
     fun onAdDismiss(adKey: String, adShown: Boolean = false, rewardEarned: Boolean = false) {}

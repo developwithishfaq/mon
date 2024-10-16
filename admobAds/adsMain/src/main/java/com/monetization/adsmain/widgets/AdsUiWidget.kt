@@ -11,14 +11,12 @@ import com.monetization.bannerads.BannerAdSize
 import com.monetization.bannerads.BannerAdType
 import com.monetization.bannerads.ui.BannerAdWidget
 import com.monetization.core.commons.AdsCommons.logAds
-import com.monetization.core.commons.Utils.getLongSafe
-import com.monetization.core.commons.Utils.getStringSafe
+import com.monetization.core.commons.SdkConfigs.getAdWidgetModel
+import com.monetization.core.commons.SdkConfigs.isAdEnabled
 import com.monetization.core.ui.AdsWidgetData
 import com.monetization.core.ui.LayoutInfo
 import com.monetization.core.ui.ShimmerInfo
 import com.monetization.nativeads.ui.NativeAdWidget
-import org.json.JSONObject
-import video.downloader.remoteconfig.SdkRemoteConfigController
 
 class AdsUiWidget @JvmOverloads constructor(
     context: Context,
@@ -47,59 +45,28 @@ class AdsUiWidget @JvmOverloads constructor(
         }
     }
 
-    fun setWidgetKey(key: String, adsWidgetData: AdsWidgetData?, defEnabled: Boolean = true) {
-        this.widgetKey = key
-
+    fun setWidgetKey(
+        placementKey: String,
+        adKey: String,
+        model: AdsWidgetData?,
+        defEnabled: Boolean = true
+    ) {
+        this.widgetKey = placementKey
         if (widgetKey == null || widgetKey?.isEmpty() == true) {
             throw IllegalArgumentException("Please Pass Placement Key")
         }
 
-        adEnabled = SdkRemoteConfigController.getRemoteConfigBoolean(widgetKey ?: "", defEnabled)
-        logAds("setWidgetKey called($key),enabled=$adEnabled")
+        val (enabled, widgetModel) = Pair(
+            placementKey.isAdEnabled(adKey, defEnabled),
+            placementKey.getAdWidgetModel(adKey, model)
+        )
 
-        if (adsWidgetDataModel == null) {
-            val placementKey = (key ?: "") + "_Placement"
-            val widgetData =
-                SdkRemoteConfigController.getRemoteConfigString(placementKey)
-            adsWidgetDataModel = if (widgetData.isNotBlank()) {
-                try {
-                    JSONObject(widgetData).run {
-                        val enabled = getLongSafe("enabled")?.toInt()
-                        if (enabled != null && enabled == 1) {
-                            AdsWidgetData(
-                                enabled = enabled,
-                                refreshTime = getLongSafe("refreshTime"),
-                                margings = getStringSafe("margins"),
-                                adCtaHeight = getLongSafe("adCtaHeight")?.toFloat(),
-                                adCtaTextSize = getLongSafe("adCtaTextSize")?.toFloat(),
-                                adMediaViewHeight = getLongSafe("adMediaViewHeight")?.toFloat(),
-                                adIconHeight = getLongSafe("adIconHeight")?.toFloat(),
-                                adIconWidth = getLongSafe("adIconWidth")?.toFloat(),
-                                adHeadlineTextSize = getLongSafe("adHeadlineTextSize")?.toFloat(),
-                                adBodyTextSize = getLongSafe("adBodyTextSize")?.toFloat(),
-                                adCtaBgColor = getStringSafe("adCtaBgColor"),
-                                adLayout = getStringSafe("adLayout"),
-                                adCtaTextColor = getStringSafe("adCtaTextColor"),
-                                adHeadLineTextColor = getStringSafe("adHeadLineTextColor"),
-                                adBodyTextColor = getStringSafe("adBodyTextColor"),
-                                adAttrTextColor = getStringSafe("adAttrTextColor"),
-                                adAttrBgColor = getStringSafe("adAttrBgColor"),
-                            )
-                        } else {
-                            adsWidgetData
-                        }
-                    }
-                } catch (_: Exception) {
-                    adsWidgetData
-                }
-            } else {
-                adsWidgetData
-            }
-            nativeWidget.setAdsWidgetData(
-                adsWidgetData = adsWidgetDataModel,
-                isValuesFromRemote = widgetData.isNotBlank()
-            )
-        }
+        adEnabled = enabled
+        adsWidgetDataModel = widgetModel
+        nativeWidget.setAdsWidgetData(
+            adsWidgetData = adsWidgetDataModel,
+            isValuesFromRemote = widgetModel.toString() != model.toString()
+        )
     }
 
     fun attachWithLifecycle(lifecycle: Lifecycle, forBanner: Boolean = false) {

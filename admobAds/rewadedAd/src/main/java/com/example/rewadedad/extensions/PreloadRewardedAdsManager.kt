@@ -3,8 +3,8 @@ package com.example.rewadedad.extensions
 import android.app.Activity
 import com.example.rewadedad.AdmobRewardedAd
 import com.example.rewadedad.AdmobRewardedAdsManager
-import com.monetization.core.AdmobBasePreloadAdsManager
-import com.monetization.core.FullScreenAdsShowListener
+import com.monetization.core.managers.AdmobBasePreloadAdsManager
+import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
 
 object PreloadRewardedAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED) {

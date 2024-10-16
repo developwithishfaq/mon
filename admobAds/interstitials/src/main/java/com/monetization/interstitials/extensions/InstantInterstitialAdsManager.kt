@@ -1,7 +1,7 @@
 package com.monetization.interstitials.extensions
 
 import android.app.Activity
-import com.monetization.core.AdmobBaseInstantAdsManager
+import com.monetization.core.managers.AdmobBaseInstantAdsManager
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.interstitials.AdmobInterstitialAd
 import com.monetization.interstitials.AdmobInterstitialAdsManager

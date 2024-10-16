@@ -1,8 +1,8 @@
 package com.monetization.interstitials.extensions
 
 import android.app.Activity
-import com.monetization.core.AdmobBasePreloadAdsManager
-import com.monetization.core.FullScreenAdsShowListener
+import com.monetization.core.managers.AdmobBasePreloadAdsManager
+import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.interstitials.AdmobInterstitialAd
 import com.monetization.interstitials.AdmobInterstitialAdsManager

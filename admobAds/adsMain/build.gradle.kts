@@ -37,24 +37,13 @@ android {
 }
 
 dependencies {
-
-    implementation("androidx.core:core-ktx:1.13.1")
-//    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
 
     implementation(libs.bundles.ads.related)
     implementation(project(":admobAds:appOpen"))
     implementation(project(":admobAds:bannerAds"))
     implementation(project(":admobAds:core"))
-    implementation(project(":admobAds:appUpdate"))
-    implementation(project(":admobAds:consent"))
-    implementation(project(":admobAds:firebaseConfig"))
     implementation(project(":admobAds:interstitials"))
     implementation(project(":admobAds:nativeAds"))
     implementation(project(":admobAds:rewadedAd"))

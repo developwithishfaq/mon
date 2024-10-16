@@ -1,5 +1,6 @@
-package com.monetization.core
+package com.monetization.core.managers
 
+import com.monetization.core.controllers.AdsControllerBaseHelper
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.history.AdsManagerHistoryHelper
 

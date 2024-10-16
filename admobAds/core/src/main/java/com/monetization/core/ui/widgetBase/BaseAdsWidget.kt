@@ -9,9 +9,9 @@ import android.widget.FrameLayout
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.monetization.core.AdsController
-import com.monetization.core.AdsControllerBaseHelper
-import com.monetization.core.AdsManager
+import com.monetization.core.controllers.AdsController
+import com.monetization.core.controllers.AdsControllerBaseHelper
+import com.monetization.core.managers.AdsManager
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ad_units.core.AdUnit
 import com.monetization.core.commons.AdsCommons.getGoodName
@@ -48,7 +48,7 @@ abstract class BaseAdsWidget<T : AdsControllerBaseHelper> @JvmOverloads construc
     private var adsManager: AdsManager<T>? = null
 
     fun setAdsWidgetData(adsWidgetData: AdsWidgetData?, isValuesFromRemote: Boolean) {
-        logAds("setAdsWidgetData(fromRemote=$isValuesFromRemote) called=$adsWidgetData")
+        logAds("setAdsWidgetData(fromRemote=$isValuesFromRemote) Widget Data=$adsWidgetData")
         this.isValuesFromRemote = isValuesFromRemote
         this.adsWidgetData = adsWidgetData
     }

@@ -8,15 +8,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.monetization.appopen.AdmobAppOpenAd
 import com.monetization.appopen.AdmobAppOpenAdsManager
-import com.monetization.core.AdsLoadingStatusListener
-import com.monetization.core.FullScreenAdsShowListener
 import com.monetization.core.commons.AdsCommons.logAds
+import com.monetization.core.commons.SdkConfigs.isAdEnabled
+import com.monetization.core.managers.AdsLoadingStatusListener
+import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.interstitials.AdmobInterstitialAd
 import com.monetization.interstitials.AdmobInterstitialAdsManager
-import video.downloader.remoteconfig.SdkRemoteConfigConstants.isAdEnabled
 
-class AdmobSplashAdController constructor(
-) : DefaultLifecycleObserver {
+class AdmobSplashAdController : DefaultLifecycleObserver {
 
     private var listener: FullScreenAdsShowListener? = null
 
@@ -48,7 +47,7 @@ class AdmobSplashAdController constructor(
         normalLoadingTime: Long = 1_000,
         normalLoadingDialog: (() -> Unit)? = null
     ) {
-        val enable = enableKey.isAdEnabled()
+        val enable = enableKey.isAdEnabled(adType.getAdKey())
         this.listener = callBack
         this.activity = activity
         this.splashAdType = adType
@@ -85,9 +84,13 @@ class AdmobSplashAdController constructor(
                     removeCallBacks()
                     if (splashNormalLoadingTime > 0) {
                         showLoadingDialog?.invoke()
-                        Handler(Looper.getMainLooper()).postDelayed({
+                        try {
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                showSplashAd(activity, adKey)
+                            }, splashNormalLoadingTime)
+                        } catch (_: Exception) {
                             showSplashAd(activity, adKey)
-                        }, splashNormalLoadingTime)
+                        }
                     } else {
                         showSplashAd(activity, adKey)
                     }
@@ -120,7 +123,7 @@ class AdmobSplashAdController constructor(
                 listener?.onShowBlackBg(adKey, false)
                 if (isInterShowing) {
                     nullAd()
-                    onAdDismissed(adKey,adShown)
+                    onAdDismissed(adKey, adShown)
                 }
             }
 

@@ -50,8 +50,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
 
-//    implementation(project(":admobAds:core"))
-
 }
 
 

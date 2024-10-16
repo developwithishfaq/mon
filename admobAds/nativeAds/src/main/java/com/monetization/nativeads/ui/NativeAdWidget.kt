@@ -5,7 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.monetization.core.AdsLoadingStatusListener
+import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.NativeConstants.inflateLayoutByLayoutInfo

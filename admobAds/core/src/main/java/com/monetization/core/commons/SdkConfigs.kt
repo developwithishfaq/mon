@@ -4,14 +4,15 @@ import android.content.Context
 import com.facebook.shimmer.BuildConfig
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
+import com.monetization.core.listeners.RemoteConfigsProvider
 import com.monetization.core.listeners.SdkListener
+import com.monetization.core.ui.AdsWidgetData
 import java.util.UUID
 
 object SdkConfigs {
 
     private var isTestModeEnabled = BuildConfig.DEBUG
     private var disableAllAds = false
-
 
 
     fun getUserId(context: Context): String {
@@ -40,6 +41,26 @@ object SdkConfigs {
 
 
     private var sdkListener: SdkListener? = null
+    private var configListener: RemoteConfigsProvider? = null
+
+    fun setRemoteConfigsListener(listener: RemoteConfigsProvider) {
+        configListener = listener
+    }
+
+    fun String.isAdEnabled(key: String, def: Boolean = true): Boolean {
+        if (configListener == null) {
+            throw IllegalArgumentException("Please set Remote Config Listener by call setRemoteConfigsListener(this)")
+        }
+        return configListener?.isAdEnabled(this, key) ?: def
+    }
+
+    fun String.getAdWidgetModel(key:String,model: AdsWidgetData? = null): AdsWidgetData? {
+        if (configListener == null) {
+            throw IllegalArgumentException("Please set Remote Config Listener by call setRemoteConfigsListener(this)")
+        }
+        return configListener?.getAdWidgetData(this, key) ?: model
+    }
+
 
     fun setListener(
         listener: SdkListener,

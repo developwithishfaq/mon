@@ -10,7 +10,7 @@ import com.monetization.bannerads.AdmobBannerAdsController
 import com.monetization.bannerads.AdmobBannerAdsManager
 import com.monetization.bannerads.BannerAdSize
 import com.monetization.bannerads.BannerAdType
-import com.monetization.core.AdsLoadingStatusListener
+import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.NativeConstants.inflateLayoutByName

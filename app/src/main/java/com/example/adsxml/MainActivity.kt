@@ -1,19 +1,23 @@
 package com.example.adsxml
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.adsxml.databinding.ActivityMainBinding
 import com.monetization.adsmain.commons.addNewController
 import com.monetization.adsmain.commons.loadAd
+import com.monetization.adsmain.commons.sdkNativeAd
 import com.monetization.adsmain.splash.AdmobSplashAdController
 import com.monetization.core.ad_units.core.AdType
+import com.monetization.core.commons.NativeTemplates
 import com.monetization.core.utils.dialog.SdkDialogs
-import com.monetization.core.utils.dialog.showNormalLoadingDialog
 import com.monetization.interstitials.AdmobInterstitialAdsManager
-import com.monetization.interstitials.extensions.InstantInterstitialAdsManager
-import com.monetization.interstitials.extensions.PreloadInterstitialAdsManager
+import com.monetization.nativeads.AdmobNativeAdsManager
+import com.remote.firebaseconfigs.SdkConfigListener
+import com.remote.firebaseconfigs.SdkRemoteConfigController
 import org.koin.android.ext.android.inject
-import video.downloader.remoteconfig.SdkRemoteConfigConstants.toConfigString
+
+private var TestEnabled = false
 
 class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -29,40 +33,42 @@ class MainActivity : ComponentActivity() {
             "Splash", listOf("")
         )
         AdmobInterstitialAdsManager.addNewController(
-            "NewInter", listOf("", "","","")
+            "NewInter", listOf("", "", "", "")
         )
-        binding.preloadAd.setOnClickListener {
-            "NewInter".loadAd(AdType.INTERSTITIAL, this@MainActivity)
-        }
+        AdmobNativeAdsManager.addNewController(
+            "Native", listOf("", "", "", "")
+        )
         val dialog = SdkDialogs(this)
-        binding.showAd.setOnClickListener {
-            PreloadInterstitialAdsManager.tryShowingInterstitialAd(
-                true.toConfigString(),
-                key = "NewInter",
-                activity = this@MainActivity,
-                onLoadingDialogStatusChange = {
-                    if (it) {
-                        dialog.showNormalLoadingDialog()
-                    } else {
-                        dialog.hideLoadingDialog()
-                    }
-                },
-                onAdDismiss = {
 
-                },
-                requestNewIfAdShown = true,
-                requestNewIfNotAvailable = true
-            )/*
-            InstantInterstitialAdsManager.showInstantInterstitialAd(true.toConfigString(),
-                this@MainActivity,
-                "NewInter",
-                onLoadingDialogStatusChange = {
-                    if (it) {
-                        dialog.showNormalLoadingDialog()
-                    } else {
-                        dialog.hideLoadingDialog()
+        binding.fetchConfig.setOnClickListener {
+            SdkRemoteConfigController.fetchRemoteConfig(
+                defaultXml = R.xml.backup_rules,
+                callback = object : SdkConfigListener {
+                    override fun onDismiss() {
+
                     }
-                })*/
+
+                    override fun onFailure(error: String) {
+
+                    }
+
+                    override fun onSuccess() {
+                        assignConfigs()
+                    }
+
+                    override fun onUpdate() {
+                    }
+                },
+                onUpdate = {
+                    assignConfigs()
+                }
+            )
+        }
+        binding.preloadAd.setOnClickListener {
+            "Native".loadAd(AdType.INTERSTITIAL, this@MainActivity)
+        }
+        binding.showAd.setOnClickListener {
+            showNativeAd()
         }
         /*
                 splashAdController.showSplashAd(
@@ -89,5 +95,51 @@ class MainActivity : ComponentActivity() {
                     },
                 )*/
 
+
+        /*
+        InstantInterstitialAdsManager.showInstantInterstitialAd(true.toConfigString(),
+            this@MainActivity,
+            "NewInter",
+            onLoadingDialogStatusChange = {
+                if (it) {
+                    dialog.showNormalLoadingDialog()
+                } else {
+                    dialog.hideLoadingDialog()
+                }
+            })*/
+        /*
+                PreloadInterstitialAdsManager.tryShowingInterstitialAd(
+                    "NewInter",
+                    key = "NewInter",
+                    activity = this@MainActivity,
+                    onLoadingDialogStatusChange = {
+                        if (it) {
+                            dialog.showNormalLoadingDialog()
+                        } else {
+                            dialog.hideLoadingDialog()
+                        }
+                    },
+                    onAdDismiss = {
+
+                    },
+                    requestNewIfAdShown = true,
+                    requestNewIfNotAvailable = true
+                )*/
+    }
+
+    private fun assignConfigs() {
+        TestEnabled = SdkRemoteConfigController.getRemoteConfigBoolean("TestEnabled")
+        Toast.makeText(this, "TestEnabled=$TestEnabled", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showNativeAd() {
+        binding.adFrame.sdkNativeAd(
+            activity = this,
+            adLayout = NativeTemplates.SmallNative,
+            adKey = "Native",
+            placementKey = "TestEnabled",
+            showNewAdEveryTime = true,
+            lifecycle = lifecycle
+        )
     }
 }

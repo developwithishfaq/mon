@@ -1,4 +1,4 @@
-package com.monetization.core
+package com.monetization.core.controllers
 
 import android.app.Activity
 import com.monetization.core.ad_units.core.AdType
@@ -7,6 +7,7 @@ import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.SdkConfigs
 import com.monetization.core.history.AdsManagerHistoryHelper
 import com.monetization.core.listeners.ControllersListener
+import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.models.AdmobAdInfo
 import com.monetization.core.models.Failed
 import com.monetization.core.models.Loaded

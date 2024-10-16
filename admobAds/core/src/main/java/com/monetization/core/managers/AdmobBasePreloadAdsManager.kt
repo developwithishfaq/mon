@@ -1,14 +1,14 @@
-package com.monetization.core
+package com.monetization.core.managers
 
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import com.monetization.core.ad_units.core.AdType
-import com.monetization.core.commons.AdsCommons
 import com.monetization.core.commons.AdsCommons.isFullScreenAdShowing
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.SdkConfigs
-import video.downloader.remoteconfig.SdkRemoteConfigConstants.isAdEnabled
+import com.monetization.core.commons.SdkConfigs.isAdEnabled
+import com.monetization.core.controllers.AdsController
 
 abstract class AdmobBasePreloadAdsManager(
     private val adType: AdType,
@@ -40,14 +40,14 @@ abstract class AdmobBasePreloadAdsManager(
         onAdDismiss: ((Boolean) -> Unit)? = null,
         showAd: () -> Unit,
     ) {
-        val enabled = placementKey.isAdEnabled()
+        val key = controller?.getAdKey() ?: ""
+        val enabled = placementKey.isAdEnabled(key)
         if (isFullScreenAdShowing) {
             logAds("Full Screen Ad is already showing", true)
             return
         }
         loadingDialogListener = onLoadingDialogStatusChange
         onDismissListener = onAdDismiss
-        val key = controller?.getAdKey() ?: ""
         val availableAd = controller?.getAvailableAd()
         if (controller == null) {
             logAds("No Controller Found Against $key,$adType", true)
@@ -65,7 +65,7 @@ abstract class AdmobBasePreloadAdsManager(
             onFreeAd()
             return
         }
-        if (availableAd == null){
+        if (availableAd == null) {
             logAds("$adType:$key, No Ad To Show, Please Request an ad First", true)
             onFreeAd()
             return

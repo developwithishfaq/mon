@@ -5,8 +5,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback
-import com.monetization.core.AdsControllerBaseHelper
-import com.monetization.core.AdsLoadingStatusListener
+import com.monetization.core.controllers.AdsControllerBaseHelper
+import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ad_units.core.AdUnit
 import com.monetization.core.listeners.ControllersListener

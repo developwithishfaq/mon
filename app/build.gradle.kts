@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("kotlin-kapt")
-//    alias(libs.plugins.compose.compiler)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -69,23 +70,17 @@ dependencies {
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.core)
+    implementation("com.github.developwithishfaq:remote-config:0.0.2")
 
     implementation(project(":admobAds:core"))
     implementation(project(":admobAds:adsMain"))
     implementation(project(":admobAds:appOpen"))
-    implementation(project(":admobAds:appUpdate"))
     implementation(project(":admobAds:bannerAds"))
-//    implementation(project(":admobAds:composeViews"))
-    implementation(project(":admobAds:consent"))
-//    implementation(project(":admobAds:debug"))
-    implementation(project(":admobAds:firebaseConfig"))
     implementation(project(":admobAds:interstitials"))
     implementation(project(":admobAds:nativeAds"))
     implementation(project(":admobAds:rewadedAd"))
-//    implementation(project(":admobAds:supaBase"))
     implementation(project(":admobAds:rewardedInterAds"))
     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
-//    implementation("com.ikame.android-sdk:ikm-android-sdk-release:3.0.140-beta")
 
 
 }

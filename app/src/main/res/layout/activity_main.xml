@@ -7,10 +7,16 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <FrameLayout
+    <com.monetization.adsmain.widgets.AdsUiWidget
         android:id="@+id/adFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/fetchConfig"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remote Config" />
 
     <Button
         android:id="@+id/preloadAd"

@@ -5,8 +5,8 @@ import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
-import com.monetization.core.AdsControllerBaseHelper
-import com.monetization.core.AdsLoadingStatusListener
+import com.monetization.core.controllers.AdsControllerBaseHelper
+import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ad_units.core.AdUnit
 import com.monetization.core.commons.AdsCommons.logAds

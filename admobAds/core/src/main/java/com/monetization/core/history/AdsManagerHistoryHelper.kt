@@ -1,6 +1,6 @@
 package com.monetization.core.history
 
-import com.monetization.core.AdsController
+import com.monetization.core.controllers.AdsController
 import com.monetization.core.models.AdmobAdInfo
 import com.monetization.core.models.EventInfo
 import com.monetization.core.models.LogInfo

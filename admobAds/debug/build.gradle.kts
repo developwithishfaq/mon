@@ -67,7 +67,7 @@ dependencies {
     implementation(project(":admobAds:bannerAds"))
     implementation(project(":admobAds:core"))
     implementation(project(":admobAds:consent"))
-    implementation(project(":admobAds:firebaseConfig"))
+//    implementation(project(":admobAds:firebaseConfig"))
     implementation(project(":admobAds:interstitials"))
     implementation(project(":admobAds:nativeAds"))
 

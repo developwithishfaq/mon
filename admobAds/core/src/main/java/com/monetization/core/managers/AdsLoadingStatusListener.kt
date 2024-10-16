@@ -1,4 +1,4 @@
-package com.monetization.core
+package com.monetization.core.managers
 
 interface AdsLoadingStatusListener {
     fun onAdLoaded(adKey: String)

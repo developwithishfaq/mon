@@ -2,28 +2,21 @@ package com.monetization.adsmain.sdk
 
 import android.content.Context
 import com.google.android.gms.ads.MobileAds
-import com.monetization.core.firebase.Sdk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import video.downloader.remoteconfig.SdkFirebaseInternal
 
 
-class AdsSdk(
+class AdmobAdsSdk(
 ) {
     private var isSdkInitialized = false
-    private var isFirebaseInitialized = false
     fun initAdsSdk(
         context: Context,
         initAdsSdk: Boolean = true,
-        initFirebase: Boolean = true,
         onInitialized: () -> Unit,
     ) {
         if (initAdsSdk) {
             initAdmobSdk(context, onInitialized)
-        }
-        if (initFirebase) {
-            initFirebase(context, onInitialized)
         }
     }
 
@@ -41,13 +34,13 @@ class AdsSdk(
             MobileAds.setAppMuted(true)
         }
     }
-
-    private fun initFirebase(context: Context, onInitialized: () -> Unit) {
-        if (isFirebaseInitialized) {
-            return
-        }
-        isFirebaseInitialized = true
-        Sdk.initFirebase(context)
-        onInitialized.invoke()
-    }
+    /*
+        private fun initFirebase(context: Context, onInitialized: () -> Unit) {
+            if (isFirebaseInitialized) {
+                return
+            }
+            isFirebaseInitialized = true
+            Sdk.initFirebase(context)
+            onInitialized.invoke()
+        }*/
 }

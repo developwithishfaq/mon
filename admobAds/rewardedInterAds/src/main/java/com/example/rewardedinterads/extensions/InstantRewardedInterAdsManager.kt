@@ -3,8 +3,8 @@ package com.example.rewardedinterads.extensions
 import android.app.Activity
 import com.example.rewardedinterads.AdmobRewardedInterAd
 import com.example.rewardedinterads.AdmobRewardedInterAdsManager
-import com.monetization.core.AdmobBaseInstantAdsManager
-import com.monetization.core.FullScreenAdsShowListener
+import com.monetization.core.managers.AdmobBaseInstantAdsManager
+import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
 
 object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARDED_INTERSTITIAL) {

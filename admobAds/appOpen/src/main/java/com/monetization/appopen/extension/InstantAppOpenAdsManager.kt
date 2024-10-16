@@ -3,8 +3,8 @@ package com.monetization.appopen.extension
 import android.app.Activity
 import com.monetization.appopen.AdmobAppOpenAd
 import com.monetization.appopen.AdmobAppOpenAdsManager
-import com.monetization.core.AdmobBaseInstantAdsManager
-import com.monetization.core.FullScreenAdsShowListener
+import com.monetization.core.managers.AdmobBaseInstantAdsManager
+import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons
 
