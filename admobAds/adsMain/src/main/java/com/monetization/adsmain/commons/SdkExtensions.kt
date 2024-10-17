@@ -5,6 +5,7 @@ import androidx.lifecycle.Lifecycle
 import com.monetization.adsmain.widgets.AdsUiWidget
 import com.monetization.bannerads.BannerAdSize
 import com.monetization.bannerads.BannerAdType
+import com.monetization.core.listeners.UiAdsListener
 import com.monetization.core.ui.AdsWidgetData
 import com.monetization.core.ui.LayoutInfo
 import com.monetization.core.ui.ShimmerInfo
@@ -21,6 +22,7 @@ fun AdsUiWidget.sdkNativeAd(
     showNewAdEveryTime: Boolean = true,
     defaultEnable: Boolean = true,
     adsWidgetData: AdsWidgetData? = null,
+    listener: UiAdsListener? = null
 ) {
     apply {
         attachWithLifecycle(lifecycle = lifecycle, false)
@@ -36,7 +38,8 @@ fun AdsUiWidget.sdkNativeAd(
             adKey = adKey,
             shimmerInfo = showShimmerLayout,
             oneTimeUse = showNewAdEveryTime,
-            requestNewOnShow = requestNewOnShow
+            requestNewOnShow = requestNewOnShow,
+            listener = listener
         )
     }
 }
@@ -48,10 +51,10 @@ fun AdsUiWidget.sdkBannerAd(
     lifecycle: Lifecycle,
     type: BannerAdType = BannerAdType.Normal(BannerAdSize.AdaptiveBanner),
     showShimmerLayout: ShimmerInfo = ShimmerInfo.GivenLayout(),
-//    adsWidgetData: AdsWidgetData,
     requestNewOnShow: Boolean = false,
     showNewAdEveryTime: Boolean = true,
     defaultEnable: Boolean = true,
+    listener: UiAdsListener? = null
 ) {
     apply {
         attachWithLifecycle(lifecycle = lifecycle, true)
@@ -66,7 +69,8 @@ fun AdsUiWidget.sdkBannerAd(
             adKey = adKey,
             shimmerInfo = showShimmerLayout,
             oneTimeUse = showNewAdEveryTime,
-            requestNewOnShow = requestNewOnShow
+            requestNewOnShow = requestNewOnShow,
+            listener = listener
         )
     }
 }

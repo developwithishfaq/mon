@@ -5,11 +5,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import com.facebook.shimmer.ShimmerFrameLayout
-import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.NativeConstants.inflateLayoutByLayoutInfo
 import com.monetization.core.commons.NativeConstants.removeViewsFromIt
+import com.monetization.core.listeners.UiAdsListener
+import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ui.LayoutInfo
 import com.monetization.core.ui.ShimmerInfo
 import com.monetization.core.ui.widgetBase.BaseAdsWidget
@@ -39,6 +40,7 @@ class NativeAdWidget @JvmOverloads constructor(
         shimmerInfo: ShimmerInfo = ShimmerInfo.GivenLayout(),
         oneTimeUse: Boolean = true,
         requestNewOnShow: Boolean = true,
+        listener: UiAdsListener? = null
     ) {
         this.layoutView = if (isValuesFromRemote) {
             if (adsWidgetData?.adLayout != null) {
@@ -57,26 +59,40 @@ class NativeAdWidget @JvmOverloads constructor(
             enabled = enabled,
             shimmerInfo = shimmerInfo,
             adsManager = AdmobNativeAdsManager,
-            adType = AdType.NATIVE
+            adType = AdType.NATIVE,
+            listener = listener
         )
         logAds("showNativeAd called($key),enabled=$enabled,layoutView=$layoutView")
     }
 
     override fun loadAd() {
         (adsController as? AdmobNativeAdsController)?.loadAd(
-            (activity!!), "Base Native Activity", object : AdsLoadingStatusListener {
-                override fun onAdLoaded(adKey: String) {
-                    if (adLoaded) {
-                        return
-                    }
-                    adOnLoaded()
-                }
-
-                override fun onAdFailedToLoad(adKey: String, message: String, code: Int) {
-                    adOnFailed()
-                }
-            }
+            activity = (activity!!),
+            calledFrom = "Base Native Activity",
+            callback = getAdsLoadingListener()
         )
+        /*object : AdsLoadingStatusListener {
+            override fun onAdRequested(adKey: String) {
+                uiListener?.onAdRequested(adKey)
+            }
+
+            override fun onImpression(adKey: String) {
+                uiListener
+            }
+
+            override fun onAdLoaded(adKey: String) {
+                uiListener?.onAdLoaded(adKey)
+                if (adLoaded) {
+                    return
+                }
+                adOnLoaded()
+            }
+
+            override fun onAdFailedToLoad(adKey: String, message: String, code: Int) {
+                uiListener?.onAdFailed(adKey, message, code)
+                adOnFailed()
+            }
+        }*/
     }
 
     override fun populateAd() {

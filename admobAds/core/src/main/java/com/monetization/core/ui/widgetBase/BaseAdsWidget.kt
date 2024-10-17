@@ -9,9 +9,6 @@ import android.widget.FrameLayout
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.monetization.core.controllers.AdsController
-import com.monetization.core.controllers.AdsControllerBaseHelper
-import com.monetization.core.managers.AdsManager
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ad_units.core.AdUnit
 import com.monetization.core.commons.AdsCommons.getGoodName
@@ -19,6 +16,11 @@ import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.NativeConstants.makeGone
 import com.monetization.core.commons.NativeConstants.makeVisible
 import com.monetization.core.commons.SdkConfigs
+import com.monetization.core.controllers.AdsController
+import com.monetization.core.controllers.AdsControllerBaseHelper
+import com.monetization.core.listeners.UiAdsListener
+import com.monetization.core.managers.AdsLoadingStatusListener
+import com.monetization.core.managers.AdsManager
 import com.monetization.core.ui.AdsWidgetData
 import com.monetization.core.ui.ShimmerInfo
 
@@ -43,6 +45,7 @@ abstract class BaseAdsWidget<T : AdsControllerBaseHelper> @JvmOverloads construc
     var requestNewOnShow = true
     var isValuesFromRemote = false
     var shimmerInfo: ShimmerInfo = ShimmerInfo.GivenLayout()
+    var uiListener: UiAdsListener? = null
 
     var adsWidgetData: AdsWidgetData? = null
     private var adsManager: AdsManager<T>? = null
@@ -65,7 +68,8 @@ abstract class BaseAdsWidget<T : AdsControllerBaseHelper> @JvmOverloads construc
         enabled: Boolean,
         shimmerInfo: ShimmerInfo,
         adsManager: AdsManager<T>,
-        adType: AdType
+        adType: AdType,
+        listener: UiAdsListener?
     ) {
         if (SdkConfigs.canShowAds(adKey, adType).not()) {
             logAds("Ad Showing is restricted against key=$adKey for $adType", true)
@@ -73,6 +77,7 @@ abstract class BaseAdsWidget<T : AdsControllerBaseHelper> @JvmOverloads construc
             return
         }
         makeVisible()
+        this.uiListener = listener
         this.key = adKey
         this.activity = activity
         this.oneTimeUse = oneTimeUse
@@ -85,6 +90,35 @@ abstract class BaseAdsWidget<T : AdsControllerBaseHelper> @JvmOverloads construc
         this.adPopulated = false
 
         loadAdCalled(adsManager)
+    }
+
+    fun getAdsLoadingListener(): AdsLoadingStatusListener {
+        return object : AdsLoadingStatusListener {
+            override fun onAdRequested(adKey: String) {
+                uiListener?.onAdRequested(adKey)
+            }
+
+            override fun onClicked(adKey: String) {
+                uiListener?.onAdClicked(adKey)
+            }
+
+            override fun onAdLoaded(adKey: String) {
+                uiListener?.onAdLoaded(adKey)
+                if (adLoaded) {
+                    return
+                }
+                adOnLoaded()
+            }
+
+            override fun onImpression(adKey: String) {
+                uiListener?.onImpression(adKey)
+            }
+
+            override fun onAdFailedToLoad(adKey: String, message: String, code: Int) {
+                uiListener?.onAdFailed(adKey, message, code)
+                adOnFailed()
+            }
+        }
     }
 
     fun adOnLoaded() {

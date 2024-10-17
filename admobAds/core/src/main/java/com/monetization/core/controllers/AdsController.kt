@@ -8,12 +8,12 @@ import com.monetization.core.managers.AdsLoadingStatusListener
 
 
 interface AdsController {
-    fun setAdEnabled(enabled: Boolean){}
-    fun loadAd(activity: Activity, calledFrom: String, callback: AdsLoadingStatusListener?){}
-    fun resetListener(activity: Activity){}
-    fun setControllerListener(listener: ControllersListener?){}
-    fun setListener(activity: Activity, callback: AdsLoadingStatusListener){}
-    fun destroyAd(activity: Activity?){}
+    fun setAdEnabled(enabled: Boolean) {}
+    fun loadAd(activity: Activity, calledFrom: String, callback: AdsLoadingStatusListener?) {}
+    fun resetListener(activity: Activity) {}
+    fun setControllerListener(listener: ControllersListener?) {}
+    fun setListener(activity: Activity, callback: AdsLoadingStatusListener) {}
+    fun destroyAd(activity: Activity?) {}
     fun getAdKey(): String
     fun getAdId(): String
     fun getAdType(): AdType
@@ -21,6 +21,8 @@ interface AdsController {
     fun isAdAvailable(): Boolean
     fun isAdRequesting(): Boolean
     fun isAdAvailableOrRequesting(): Boolean
+    fun onDismissed()
+    fun onFailToShow()
     fun getAvailableAd(): AdUnit?
 
 }

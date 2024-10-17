@@ -6,6 +6,7 @@ import com.example.rewadedad.AdmobRewardedAdsManager
 import com.monetization.core.managers.AdmobBasePreloadAdsManager
 import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
+import com.monetization.core.commons.AdsCommons
 
 object PreloadRewardedAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED) {
 
@@ -37,8 +38,9 @@ object PreloadRewardedAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED) {
                             adShown: Boolean,
                             rewardEarned: Boolean,
                         ) {
+                            AdsCommons.isFullScreenAdShowing = false
                             onRewarded.invoke(rewardEarned)
-                            onFreeAd(true)
+                            onFreeAd(adShown)
                             if (requestNewIfAdShown && adShown) {
                                 controller.loadAd(activity, "", null)
                             }

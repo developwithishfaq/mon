@@ -49,6 +49,7 @@ class AdmobAppOpenAd(
                 super.onAdDismissedFullScreenContent()
                 AdsCommons.isFullScreenAdShowing = false
                 callBack.onAdDismiss(adKey, true)
+                controller?.onDismissed()
             }
         }
         appOpenAd.show(activity)

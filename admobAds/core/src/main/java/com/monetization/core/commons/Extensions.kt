@@ -5,8 +5,8 @@ import com.monetization.core.commons.Utils.getStringSafe
 import com.monetization.core.ui.AdsWidgetData
 import org.json.JSONObject
 
-fun String.toAdWidgetModel(default: AdsWidgetData? = null): AdsWidgetData? {
-    return JSONObject(this).run {
+fun String.placementToAdWidgetModel(default: AdsWidgetData? = null): AdsWidgetData? {
+    return JSONObject(this + "_Placement").run {
         val enabled = getLongSafe("enabled")?.toInt()
         if (enabled != null && enabled == 1) {
             AdsWidgetData(

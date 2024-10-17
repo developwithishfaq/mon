@@ -17,6 +17,7 @@ object InstantAppOpenAdsManager : AdmobBaseInstantAdsManager(AdType.AppOpen) {
         key: String,
         normalLoadingTime: Long = 1_000,
         instantLoadingTime: Long = 8_000,
+        requestNewIfAdShown: Boolean = false,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
         showBlackBg: ((Boolean) -> Unit),
         onAdDismiss: ((Boolean) -> Unit)? = null,
@@ -43,7 +44,10 @@ object InstantAppOpenAdsManager : AdmobBaseInstantAdsManager(AdType.AppOpen) {
                         ) {
                             AdsCommons.isFullScreenAdShowing = false
                             showBlackBg.invoke(false)
-                            onAdDismiss?.invoke(adShown)
+                            onFreeAd(adShown)
+                            if (requestNewIfAdShown && adShown) {
+                                controller.loadAd(activity, "", null)
+                            }
                         }
                     }
                 )

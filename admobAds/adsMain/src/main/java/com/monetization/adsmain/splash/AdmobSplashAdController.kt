@@ -36,6 +36,23 @@ class AdmobSplashAdController : DefaultLifecycleObserver {
     private var appOpenAd: AdmobAppOpenAd? = null
     private var showLoadingDialog: (() -> Unit)? = null
 
+    fun reset() {
+        enabled = false
+        isScreenInPause = false
+        isHandlerRunning = false
+        splashAdLoaded = false
+        splashAdFailed = false
+        runnableSplash = null
+        splashAdTime = 8_000L
+        mLifecycle = null
+        splashNormalLoadingTime = 1_000L
+        activity = null
+        try {
+            handlerAd.removeCallbacksAndMessages(null)
+        } catch (_: Exception) {
+
+        }
+    }
 
     fun showSplashAd(
         enableKey: String,

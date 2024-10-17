@@ -10,13 +10,14 @@ import com.monetization.bannerads.AdmobBannerAdsController
 import com.monetization.bannerads.AdmobBannerAdsManager
 import com.monetization.bannerads.BannerAdSize
 import com.monetization.bannerads.BannerAdType
-import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.NativeConstants.inflateLayoutByName
 import com.monetization.core.commons.NativeConstants.makeGone
 import com.monetization.core.commons.NativeConstants.makeVisible
 import com.monetization.core.commons.NativeConstants.removeViewsFromIt
+import com.monetization.core.listeners.UiAdsListener
+import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ui.ShimmerInfo
 import com.monetization.core.ui.widgetBase.BaseAdsWidget
 
@@ -38,6 +39,7 @@ class BannerAdWidget @JvmOverloads constructor(
         shimmerInfo: ShimmerInfo = ShimmerInfo.GivenLayout(),
         oneTimeUse: Boolean = true,
         requestNewOnShow: Boolean = true,
+        listener: UiAdsListener?
     ) {
         this.bannerAdType = bannerAdType
         onShowAdCalled(
@@ -48,7 +50,8 @@ class BannerAdWidget @JvmOverloads constructor(
             enabled = enabled,
             shimmerInfo = shimmerInfo,
             adsManager = AdmobBannerAdsManager,
-            adType = AdType.BANNER
+            adType = AdType.BANNER,
+            listener = listener
         )
         logAds("showBannerAd called($key)=$bannerAdType,enable=$enabled,")
     }
@@ -59,14 +62,28 @@ class BannerAdWidget @JvmOverloads constructor(
             bannerAdType = bannerAdType,
             calledFrom = "Base Banner Activity",
             callback = object : AdsLoadingStatusListener {
+                override fun onAdRequested(adKey: String) {
+                    uiListener?.onAdRequested(adKey)
+                }
+
                 override fun onAdLoaded(adKey: String) {
+                    uiListener?.onAdLoaded(adKey)
                     if (adLoaded) {
                         bannerRefreshed = true
                     }
                     adOnLoaded()
                 }
 
+                override fun onImpression(adKey: String) {
+                    uiListener?.onImpression(adKey)
+                }
+
+                override fun onClicked(adKey: String) {
+                    uiListener?.onAdClicked(adKey)
+                }
+
                 override fun onAdFailedToLoad(adKey: String, message: String, code: Int) {
+                    uiListener?.onAdFailed(adKey, message, code)
                     adOnFailed()
                 }
             }

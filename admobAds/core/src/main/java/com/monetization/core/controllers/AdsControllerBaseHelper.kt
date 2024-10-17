@@ -106,6 +106,7 @@ abstract class AdsControllerBaseHelper(
             adImpressionTime = null
         )
         addInAdHistory()
+        loadingStateListener?.onAdRequested(adKey)
         controllerListener?.onAdRequested(adKey, adType, customDataMap)
         logAds("$adType Ad Requested,Key=$adKey,Id=$latestAdIdRequested")
     }
@@ -221,6 +222,14 @@ abstract class AdsControllerBaseHelper(
 
     override fun isAdAvailableOrRequesting(): Boolean {
         return isAdRequesting() || isAdAvailable()
+    }
+
+    override fun onDismissed() {
+        listener?.onAdDismissed(adKey, adType, dataMap = customDataMap)
+    }
+
+    override fun onFailToShow() {
+        listener?.onFailToShow(adKey, adType, dataMap = customDataMap)
     }
 
 }

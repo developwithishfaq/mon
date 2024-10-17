@@ -16,7 +16,7 @@ abstract class AdmobBasePreloadAdsManager(
     private var loadingDialogListener: ((Boolean) -> Unit)? = null
 
     private var onDismissListener: ((Boolean) -> Unit)? = null
-    fun onFreeAd(check: Boolean = false, rewardEarned: Boolean = false) {
+    fun onFreeAd(check: Boolean = false) {
         onDismissListener?.invoke(check)
         onDismissListener = null
         isFullScreenAdShowing = false

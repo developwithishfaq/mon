@@ -63,17 +63,6 @@ abstract class AdmobBaseInstantAdsManager(private val adType: AdType) {
         }
     }
 
-    val fullScreenAdListener = object : FullScreenAdsShowListener {
-        override fun onAdDismiss(adKey: String, adShown: Boolean, rewardEarned: Boolean) {
-            logAds("onAdDismiss called, adShown = $adShown, rewardEarned = $rewardEarned", true)
-            onFreeAd(true)
-        }
-
-        override fun onAdShownFailed(adKey: String) {
-            onFreeAd()
-        }
-    }
-
     fun canShowAd(
         activity: Activity,
         placementKey: String,

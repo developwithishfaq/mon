@@ -22,8 +22,7 @@ class AdmobInterstitialAd(
             return
         }
         AdsCommons.isFullScreenAdShowing = true
-        val controller: AdsControllerBaseHelper? =
-            AdmobInterstitialAdsManager.getAdController(adKey)
+        val controller: AdsControllerBaseHelper? = AdmobInterstitialAdsManager.getAdController(adKey)
         interstitialAds.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdFailedToShowFullScreenContent(p0: AdError) {
                 super.onAdFailedToShowFullScreenContent(p0)
@@ -37,6 +36,7 @@ class AdmobInterstitialAd(
                 AdmobInterstitialAdsManager.getAdController(adKey)?.destroyAd(activity)
                 callBack.onAdShown(adKey)
             }
+
 
             override fun onAdClicked() {
                 super.onAdClicked()
@@ -54,6 +54,7 @@ class AdmobInterstitialAd(
                 logAds("Interstitial onAdDismissedFullScreenContent called", true)
                 AdsCommons.isFullScreenAdShowing = false
                 callBack.onAdDismiss(adKey, true)
+                controller?.onDismissed()
             }
         }
         interstitialAds.show(activity)

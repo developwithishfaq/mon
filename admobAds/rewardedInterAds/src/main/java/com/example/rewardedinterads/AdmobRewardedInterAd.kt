@@ -51,6 +51,7 @@ class AdmobRewardedInterAd(
                 super.onAdDismissedFullScreenContent()
                 AdsCommons.isFullScreenAdShowing = false
                 callBack.onAdDismiss(adKey = adKey, adShown = true, rewardEarned = rewardEarned)
+                controller?.onDismissed()
             }
         }
         rewardedInter.show(

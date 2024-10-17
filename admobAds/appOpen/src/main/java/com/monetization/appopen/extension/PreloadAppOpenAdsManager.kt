@@ -6,6 +6,7 @@ import com.monetization.appopen.AdmobAppOpenAdsManager
 import com.monetization.core.managers.AdmobBasePreloadAdsManager
 import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
+import com.monetization.core.commons.AdsCommons
 
 object PreloadAppOpenAdsManager : AdmobBasePreloadAdsManager(AdType.AppOpen) {
 
@@ -39,6 +40,7 @@ object PreloadAppOpenAdsManager : AdmobBasePreloadAdsManager(AdType.AppOpen) {
                             adShown: Boolean,
                             rewardEarned: Boolean,
                         ) {
+                            AdsCommons.isFullScreenAdShowing = false
                             showBlackBg.invoke(false)
                             onFreeAd(true)
                             if (requestNewIfAdShown && adShown) {

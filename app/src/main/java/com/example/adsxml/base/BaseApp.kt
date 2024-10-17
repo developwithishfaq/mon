@@ -4,6 +4,7 @@ import android.app.Application
 import com.monetization.adsmain.splash.AdmobSplashAdController
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.SdkConfigs
+import com.monetization.core.commons.placementToAdWidgetModel
 import com.monetization.core.listeners.RemoteConfigsProvider
 import com.monetization.core.listeners.SdkListener
 import com.monetization.core.ui.AdsWidgetData
@@ -18,9 +19,6 @@ class BaseApp : Application() {
         super.onCreate()
 
         val module = module {
-//            viewModel {
-//                SdkNativeViewModel()
-//            }
             single {
                 AdmobSplashAdController()
             }
@@ -29,13 +27,6 @@ class BaseApp : Application() {
             modules(module)
             androidContext(applicationContext)
         }
-        /*
-        SdkDebugHelper.initDebugMode(applicationContext, object : DebugListener {
-            override fun canLaunchDebugActivity(): Boolean {
-                return true
-            }
-        })
-        */
 
         SdkConfigs.setRemoteConfigsListener(object : RemoteConfigsProvider {
             override fun isAdEnabled(placementKey: String, adKey: String): Boolean {
@@ -43,10 +34,11 @@ class BaseApp : Application() {
             }
 
             override fun getAdWidgetData(placementKey: String, adKey: String): AdsWidgetData? {
-                return null
+                return SdkRemoteConfigController.getRemoteConfigString(placementKey)
+                    .placementToAdWidgetModel()
             }
         })
-        SdkConfigs.setListener(object : SdkListener {
+        SdkConfigs.setListener(listener = object : SdkListener {
             override fun canShowAd(adType: AdType, adKey: String): Boolean {
                 return true
             }
@@ -54,6 +46,7 @@ class BaseApp : Application() {
             override fun canLoadAd(adType: AdType, adKey: String): Boolean {
                 return true
             }
-        }, true)
+        }, testModeEnable = true)
     }
+
 }

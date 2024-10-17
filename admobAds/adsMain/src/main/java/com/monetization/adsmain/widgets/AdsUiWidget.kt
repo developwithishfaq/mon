@@ -13,6 +13,7 @@ import com.monetization.bannerads.ui.BannerAdWidget
 import com.monetization.core.commons.AdsCommons.logAds
 import com.monetization.core.commons.SdkConfigs.getAdWidgetModel
 import com.monetization.core.commons.SdkConfigs.isAdEnabled
+import com.monetization.core.listeners.UiAdsListener
 import com.monetization.core.ui.AdsWidgetData
 import com.monetization.core.ui.LayoutInfo
 import com.monetization.core.ui.ShimmerInfo
@@ -86,6 +87,7 @@ class AdsUiWidget @JvmOverloads constructor(
         shimmerInfo: ShimmerInfo = ShimmerInfo.GivenLayout(),
         oneTimeUse: Boolean = true,
         requestNewOnShow: Boolean = true,
+        listener: UiAdsListener? = null
     ) {
         removeAndAdNativeWidget()
         try {
@@ -96,7 +98,8 @@ class AdsUiWidget @JvmOverloads constructor(
                 enabled = adEnabled,
                 shimmerInfo = shimmerInfo,
                 oneTimeUse = oneTimeUse,
-                requestNewOnShow = requestNewOnShow
+                requestNewOnShow = requestNewOnShow,
+                listener = listener
             )
         } catch (_: Exception) {
 
@@ -111,6 +114,7 @@ class AdsUiWidget @JvmOverloads constructor(
         shimmerInfo: ShimmerInfo = ShimmerInfo.GivenLayout(),
         oneTimeUse: Boolean = true,
         requestNewOnShow: Boolean = true,
+        listener: UiAdsListener?=null
     ) {
         removeAndAdBannerWidget()
         try {
@@ -121,7 +125,8 @@ class AdsUiWidget @JvmOverloads constructor(
                 enabled = adEnabled,
                 shimmerInfo = shimmerInfo,
                 oneTimeUse = oneTimeUse,
-                requestNewOnShow = requestNewOnShow
+                requestNewOnShow = requestNewOnShow,
+                listener = listener
             )
         } catch (_: Exception) {
 

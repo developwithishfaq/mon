@@ -6,6 +6,7 @@ import com.example.rewardedinterads.AdmobRewardedInterAdsManager
 import com.monetization.core.managers.AdmobBasePreloadAdsManager
 import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
+import com.monetization.core.commons.AdsCommons
 
 object PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARDED_INTERSTITIAL) {
 
@@ -17,7 +18,8 @@ object PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARD
         requestNewIfAdShown: Boolean = true,
         normalLoadingTime: Long = 1000,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
-        onAdDismiss: (Boolean, Boolean) -> Unit,
+        onRewarded: (Boolean) -> Unit,
+        onAdDismiss: ((Boolean) -> Unit)? = null,
     ) {
 
         val controller = AdmobRewardedInterAdsManager.getAdController(key)
@@ -28,9 +30,7 @@ object PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARD
             normalLoadingTime = normalLoadingTime,
             controller = controller,
             onLoadingDialogStatusChange = onLoadingDialogStatusChange,
-            onAdDismiss = { shown ->
-                onAdDismiss.invoke(shown, false)
-            },
+            onAdDismiss = onAdDismiss,
             showAd = {
                 (controller?.getAvailableAd() as? AdmobRewardedInterAd)?.showAd(
                     activity, object : FullScreenAdsShowListener {
@@ -39,7 +39,9 @@ object PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARD
                             adShown: Boolean,
                             rewardEarned: Boolean,
                         ) {
-                            onFreeAd(adShown, rewardEarned)
+                            AdsCommons.isFullScreenAdShowing = false
+                            onRewarded.invoke(rewardEarned)
+                            onFreeAd(adShown)
                             if (requestNewIfAdShown) {
                                 controller.loadAd(activity, "", null)
                             }

@@ -6,6 +6,7 @@ import com.example.rewardedinterads.AdmobRewardedInterAdsManager
 import com.monetization.core.managers.AdmobBaseInstantAdsManager
 import com.monetization.core.managers.FullScreenAdsShowListener
 import com.monetization.core.ad_units.core.AdType
+import com.monetization.core.commons.AdsCommons
 
 object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARDED_INTERSTITIAL) {
 
@@ -16,6 +17,7 @@ object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARD
         key: String,
         normalLoadingTime: Long = 1_000,
         instantLoadingTime: Long = 8_000,
+        requestNewIfAdShown: Boolean = false,
         onLoadingDialogStatusChange: (Boolean) -> Unit,
         onRewarded: (Boolean) -> Unit,
         onAdDismiss: ((Boolean) -> Unit)? = null,
@@ -38,8 +40,13 @@ object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARD
                             adShown: Boolean,
                             rewardEarned: Boolean,
                         ) {
+
+                            AdsCommons.isFullScreenAdShowing = false
                             onRewarded.invoke(rewardEarned)
-                            onFreeAd(true)
+                            onFreeAd(adShown)
+                            if (requestNewIfAdShown && adShown) {
+                                controller.loadAd(activity, "", null)
+                            }
                         }
                     }
                 )
