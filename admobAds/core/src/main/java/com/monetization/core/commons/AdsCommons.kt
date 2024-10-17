@@ -1,19 +1,21 @@
 package com.monetization.core.commons
 
 import android.app.Activity
-import com.monetization.core.BuildConfig
+import android.util.Log
+import com.facebook.shimmer.BuildConfig
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.SdkConfigs.isTestMode
-import com.monetization.core.firebase.Sdk
 
 object AdsCommons {
 
     var isDebugMode = BuildConfig.DEBUG
     var isFullScreenAdShowing = false
     fun logAds(message: String, isError: Boolean = false) {
-        Sdk.log(
-            "adsPlugin", message, isError
-        )
+        if (isError) {
+            Log.e("adsPlugin", "Admob Ads:$message")
+        } else {
+            Log.d("adsPlugin", "Admob Ads:$message")
+        }
     }
 
 
