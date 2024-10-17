@@ -38,7 +38,6 @@ object InstantInterstitialAdsManager : AdmobBaseInstantAdsManager(AdType.INTERST
                             adShown: Boolean,
                             rewardEarned: Boolean
                         ) {
-                            AdsCommons.isFullScreenAdShowing = false
                             onFreeAd(adShown)
                             if (requestNewIfAdShown && adShown) {
                                 controller.loadAd(activity, "", null)

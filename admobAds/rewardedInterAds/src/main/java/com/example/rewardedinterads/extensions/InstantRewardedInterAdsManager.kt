@@ -40,8 +40,6 @@ object InstantRewardedInterAdsManager : AdmobBaseInstantAdsManager(AdType.REWARD
                             adShown: Boolean,
                             rewardEarned: Boolean,
                         ) {
-
-                            AdsCommons.isFullScreenAdShowing = false
                             onRewarded.invoke(rewardEarned)
                             onFreeAd(adShown)
                             if (requestNewIfAdShown && adShown) {

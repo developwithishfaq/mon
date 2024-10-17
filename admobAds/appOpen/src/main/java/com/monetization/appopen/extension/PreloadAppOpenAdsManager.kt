@@ -40,9 +40,8 @@ object PreloadAppOpenAdsManager : AdmobBasePreloadAdsManager(AdType.AppOpen) {
                             adShown: Boolean,
                             rewardEarned: Boolean,
                         ) {
-                            AdsCommons.isFullScreenAdShowing = false
                             showBlackBg.invoke(false)
-                            onFreeAd(true)
+                            onFreeAd(adShown)
                             if (requestNewIfAdShown && adShown) {
                                 controller.loadAd(activity, "", null)
                             }

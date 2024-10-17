@@ -39,7 +39,6 @@ object PreloadRewardedInterAdsManager : AdmobBasePreloadAdsManager(AdType.REWARD
                             adShown: Boolean,
                             rewardEarned: Boolean,
                         ) {
-                            AdsCommons.isFullScreenAdShowing = false
                             onRewarded.invoke(rewardEarned)
                             onFreeAd(adShown)
                             if (requestNewIfAdShown) {

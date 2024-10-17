@@ -40,9 +40,7 @@ object InstantAppOpenAdsManager : AdmobBaseInstantAdsManager(AdType.AppOpen) {
                             adKey: String,
                             adShown: Boolean,
                             rewardEarned: Boolean
-
                         ) {
-                            AdsCommons.isFullScreenAdShowing = false
                             showBlackBg.invoke(false)
                             onFreeAd(adShown)
                             if (requestNewIfAdShown && adShown) {
