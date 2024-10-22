@@ -51,7 +51,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.developwithishfaq"
                 artifactId = "bannerrAds"
-                version = "2.1.3"
+                version = "2.1.4"
             }
         }
     }

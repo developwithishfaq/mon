@@ -55,7 +55,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.developwithishfaq"
                 artifactId = "coree"
-                version = "2.1.3"
+                version = "2.1.4"
             }
         }
     }
