@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/admobAds/rewadedAd" />
             <option value="$PROJECT_DIR$/admobAds/rewardedInterAds" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/consent" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

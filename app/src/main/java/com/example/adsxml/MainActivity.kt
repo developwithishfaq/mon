@@ -6,13 +6,21 @@ import androidx.activity.ComponentActivity
 import com.example.adsxml.databinding.ActivityMainBinding
 import com.monetization.adsmain.commons.addNewController
 import com.monetization.adsmain.commons.loadAd
+import com.monetization.adsmain.commons.sdkBannerAd
 import com.monetization.adsmain.commons.sdkNativeAd
 import com.monetization.adsmain.splash.AdmobSplashAdController
+import com.monetization.bannerads.AdmobBannerAdsManager
+import com.monetization.bannerads.BannerAdSize
+import com.monetization.bannerads.BannerAdType
+import com.monetization.consent.ConsentListener
+import com.monetization.consent.GoogleConsent
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.commons.NativeTemplates
+import com.monetization.core.listeners.UiAdsListener
 import com.monetization.core.utils.dialog.SdkDialogs
 import com.monetization.interstitials.AdmobInterstitialAdsManager
 import com.monetization.nativeads.AdmobNativeAdsManager
+import com.remote.firebaseconfigs.RemoteCommons.toConfigString
 import com.remote.firebaseconfigs.SdkConfigListener
 import com.remote.firebaseconfigs.SdkRemoteConfigController
 import org.koin.android.ext.android.inject
@@ -23,6 +31,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val splashAdController: AdmobSplashAdController by inject()
+    private val consent: GoogleConsent by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +46,9 @@ class MainActivity : ComponentActivity() {
         )
         AdmobNativeAdsManager.addNewController(
             "Native", listOf("", "", "", "")
+        )
+        AdmobBannerAdsManager.addNewController(
+            "Banner", listOf("", "", "", "")
         )
         val dialog = SdkDialogs(this)
 
@@ -68,63 +80,10 @@ class MainActivity : ComponentActivity() {
             "Native".loadAd(AdType.INTERSTITIAL, this@MainActivity)
         }
         binding.showAd.setOnClickListener {
-            showNativeAd()
+            showBannerAd()
+//            showNativeAd()
         }
-        /*
-                splashAdController.showSplashAd(
-                    enableKey = true.toConfigString(),
-                    adType = SplashAdType.AdmobInter("Splash"),
-                    activity = this,
-                    timeInMillis = 10_000,
-                    lifecycle = lifecycle,
-                    normalLoadingTime = 10_000,
-                    normalLoadingDialog = {
-                        dialog.showNormalLoadingDialog()
-                    },
-                    callBack = object : FullScreenAdsShowListener {
-                        override fun onAdShown(adKey: String) {
-                            super.onAdShown(adKey)
-                            dialog.hideLoadingDialog()
-                        }
 
-                        override fun onAdDismiss(adKey: String, adShown: Boolean, rewardEarned: Boolean) {
-                            super.onAdDismiss(adKey, adShown, rewardEarned)
-                            Toast.makeText(this@MainActivity, "Ad Shown=$adShown", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    },
-                )*/
-
-
-        /*
-        InstantInterstitialAdsManager.showInstantInterstitialAd(true.toConfigString(),
-            this@MainActivity,
-            "NewInter",
-            onLoadingDialogStatusChange = {
-                if (it) {
-                    dialog.showNormalLoadingDialog()
-                } else {
-                    dialog.hideLoadingDialog()
-                }
-            })*/
-        /*
-                PreloadInterstitialAdsManager.tryShowingInterstitialAd(
-                    "NewInter",
-                    key = "NewInter",
-                    activity = this@MainActivity,
-                    onLoadingDialogStatusChange = {
-                        if (it) {
-                            dialog.showNormalLoadingDialog()
-                        } else {
-                            dialog.hideLoadingDialog()
-                        }
-                    },
-                    onAdDismiss = {
-
-                    },
-                    requestNewIfAdShown = true,
-                    requestNewIfNotAvailable = true
-                )*/
     }
 
     private fun assignConfigs() {
@@ -137,9 +96,30 @@ class MainActivity : ComponentActivity() {
             activity = this,
             adLayout = NativeTemplates.SmallNative,
             adKey = "Native",
-            placementKey = "TestEnabled",
+            placementKey = true.toConfigString(),
             showNewAdEveryTime = true,
-            lifecycle = lifecycle
+            lifecycle = lifecycle,
+            listener = object : UiAdsListener {
+                override fun onAdClicked(key: String) {
+                    super.onAdClicked(key)
+                }
+            }
+        )
+    }
+
+    private fun showBannerAd() {
+        binding.adFrame.sdkBannerAd(
+            activity = this,
+            type = BannerAdType.Normal(BannerAdSize.Banner),
+            adKey = "Banner",
+            placementKey = true.toConfigString(),
+            showNewAdEveryTime = true,
+            lifecycle = lifecycle,
+            listener = object : UiAdsListener {
+                override fun onAdClicked(key: String) {
+                    super.onAdClicked(key)
+                }
+            }
         )
     }
 }

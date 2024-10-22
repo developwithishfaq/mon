@@ -141,6 +141,7 @@ class BannerAdWidget @JvmOverloads constructor(
                         when ((bannerAdType as BannerAdType.Normal).size) {
                             BannerAdSize.AdaptiveBanner -> "adapter_banner_shimmer"
                             BannerAdSize.MediumRectangle -> "rectangular_banner_shimmer"
+                            BannerAdSize.Banner -> "adapter_banner_shimmer"
                         }
                     }
                 }

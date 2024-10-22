@@ -1,5 +1,6 @@
 package com.monetization.bannerads
 
+import android.app.Activity
 import com.google.android.gms.ads.AdSize
 
 sealed class BannerAdType {
@@ -9,7 +10,7 @@ sealed class BannerAdType {
 
 }
 
-fun BannerAdType.getBannerSize(): AdSize? {
+fun BannerAdType.getBannerSize(activity: Activity): AdSize? {
     return when (this) {
         is BannerAdType.Collapsible -> {
             return null
@@ -21,8 +22,11 @@ fun BannerAdType.getBannerSize(): AdSize? {
                     AdSize.MEDIUM_RECTANGLE
                 }
 
-                BannerAdSize.AdaptiveBanner -> {
+                BannerAdSize.Banner -> {
                     AdSize.BANNER
+                }
+                BannerAdSize.AdaptiveBanner -> {
+                    getAdSize(activity)
                 }
             }
         }

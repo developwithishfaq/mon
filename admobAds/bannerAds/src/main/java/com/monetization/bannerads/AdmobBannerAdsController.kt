@@ -8,17 +8,17 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.monetization.core.controllers.AdsControllerBaseHelper
-import com.monetization.core.managers.AdsLoadingStatusListener
 import com.monetization.core.ad_units.core.AdType
 import com.monetization.core.ad_units.core.AdUnit
+import com.monetization.core.controllers.AdsControllerBaseHelper
 import com.monetization.core.listeners.ControllersListener
+import com.monetization.core.managers.AdsLoadingStatusListener
 
 class AdmobBannerAdsController(
     adKey: String,
     adIdsList: List<String>,
     listener: ControllersListener? = null
-) : AdsControllerBaseHelper(adKey, AdType.BANNER, adIdsList,listener) {
+) : AdsControllerBaseHelper(adKey, AdType.BANNER, adIdsList, listener) {
 
     private var currentBannerAd: AdmobBannerAd? = null
 
@@ -36,10 +36,11 @@ class AdmobBannerAdsController(
         val adView = AdView(activity);
         adView.adUnitId = adId
         val extras = Bundle()
-        val adSize = bannerAdType.getBannerSize()
+        val adSize = bannerAdType.getBannerSize(activity)
         if (adSize == null) {
             (bannerAdType as? BannerAdType.Collapsible)?.let {
-                adView.setAdSize(AdSize.BANNER)
+                val size = BannerAdType.Normal(BannerAdSize.AdaptiveBanner).getBannerSize(activity) ?: AdSize.BANNER
+                adView.setAdSize(size)
                 extras.putString(
                     "collapsible", when (bannerAdType.collapseType) {
                         BannerCollapsable.CollapseTop -> {
